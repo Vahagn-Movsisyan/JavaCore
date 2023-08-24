@@ -133,7 +133,6 @@ public class AllTypes {
                 System.out.println("Enter the promo-code to get a subscription");
                 String promoCode = scanner.nextLine();
                 String[] validPromoCodes = {
-
                         "PMRJ9F8X5L2K",
                         "G7D2C6H1W9P3",
                         "V5T6Y2Q8E1A4",
