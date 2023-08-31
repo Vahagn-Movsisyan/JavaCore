@@ -21,6 +21,7 @@ public class FigurePainter {
             case 3 -> figure3();
             case 4 -> figure4();
             case 5 -> figure5();
+            default -> System.out.println("You are entered an error");
         }
     }
     static void figure1(){

@@ -1,4 +1,4 @@
-package homeworks.forExamplesUpdatedVersion;
+package homeworks.hm2ForArrayExamples;
 
 import java.util.Scanner;
 
@@ -20,6 +20,7 @@ public class ForExamples {
             case "odd" -> oddNumbers();
             case "max" -> findMaxNumber();
             case "min" -> findMinNumber();
+            default -> System.out.println("You are entered an error");
         }
     }
 
