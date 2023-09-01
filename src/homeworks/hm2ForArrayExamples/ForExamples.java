@@ -67,11 +67,11 @@ public class ForExamples {
     }
 
     static void findMinNumber(){
-        int[] numbers = {2,5,8,4,9,3,7};
+        int[] numbers = {11,5,8,4,9,3,7};
 
         int minNumber = numbers[0];
         for (int i = 0; i < numbers.length; i++) {
-            if (numbers[0] < minNumber) {
+            if (numbers[i] < minNumber) {
                 minNumber = numbers[i];
             }
         }
