@@ -1,31 +1,17 @@
-import java.util.Scanner;
-
 public class Test {
-    public static boolean isPrime(int number) {
-        if (number <= 1) {
-            return false;
-        }
-
-        for (int i = 2; i * i <= number; i++) {
-            if (number % i == 0) {
-                return false;
+    public static void main(String[] args) {
+        int[] array = {4, 7, 1, 3, 9, 0, 2};
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = 0; j < array.length - 1;  j++) {
+                if (array[j] < array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
             }
         }
-
-
-        return true;
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a number to check if it's prime:");
-        int num = scanner.nextInt();
-
-        if (isPrime(num)) {
-            System.out.println(num + " is a prime number.");
-        } else {
-            System.out.println(num + " is not a prime number.");
+        for (int sortArray : array) {
+            System.out.print(sortArray + " ");
         }
     }
 }
-
