@@ -1,5 +1,8 @@
 package classwork.chapter6;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Users {
     private String name;
     private String email;
@@ -165,7 +168,14 @@ class Student extends Users {
     }
 }
 class Teatcher extends Users {
+
+    private List<String> teatcherCourses = new ArrayList<>();
+
     public Teatcher(String name, String email, String password, String conPassword, String phoneNumber, short age) {
         super(name, email, password, conPassword, phoneNumber, age);
+    }
+
+    public Teatcher() {
+
     }
 }
