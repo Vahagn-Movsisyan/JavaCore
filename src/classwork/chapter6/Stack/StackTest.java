@@ -18,8 +18,8 @@ public class StackTest {
         int e = stack.pop();
         int f = stack.pop();
         int g = stack.pop();
-        int k = stack.pop();
-        int l = stack.pop();
+//        int k = stack.pop();
+//        int l = stack.pop();
 
         System.out.println(a);
         System.out.println(b);
@@ -27,7 +27,7 @@ public class StackTest {
         System.out.println(e);
         System.out.println(f);
         System.out.println(g);
-        System.out.println(k);
-        System.out.println(l);
+//        System.out.println(k);
+//        System.out.println(l);
     }
 }
