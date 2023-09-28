@@ -1,4 +1,4 @@
-package homeworks.hm5DynamicArray;
+package homeworks.hm5to6DynamicArray;
 
 public class DynamicArray {
     //սա մեր հիմնական մասիվն է, որտեղ պահելու ենք ավելացվող էլեմենտները
@@ -59,12 +59,16 @@ public class DynamicArray {
     }
 
     public void add(int index, int value){
+        if (arrayOne.length == size) {
+            extend();
+        }
         if (index <= arrayOne.length){
-            for (int i = index; i < arrayOne.length - 1; i++) {
-                arrayOne[index] = value;
-                arrayOne[i] = arrayOne[i + 1];
+            for (int i = size - 1; i >= index ; i--) {
+                arrayOne[i + 1] = arrayOne[i];
             }
-            printAllElements();
+            arrayOne[index] = value;
+            size++;
+            print();
         }
         else {
             System.out.println(index + " isn't in array");
@@ -79,14 +83,10 @@ public class DynamicArray {
     }
 
     public int getIndexByValue(int value) {
-        int count = 0;
         for (int i = 0; i < size; i++) {
             if (value == arrayOne[i]){
-                count++;
+                return i;
             }
-        }
-        if (count > 1){
-            return value;
         }
        return -1;
     }

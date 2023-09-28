@@ -1,4 +1,4 @@
-package homeworks.hm5DynamicArray;
+package homeworks.hm5to6DynamicArray;
 
 import java.util.Scanner;
 

@@ -1,10 +1,26 @@
 public class Test {
-    int[] array = {2, 12, 8, 9, 34, 5, 13, 8, 2};
+    int[] array = {2, 12, 8, 9, 34, 5};
 
     public static void main(String[] args) {
         Test test = new Test();
-        test.delete(0);
+        test.add(2, 99);
 
+    }
+
+    public  void  add(int index, int value) {
+        if (index <= array.length) {
+            for (int i = index; i < array.length - 1; i++) {
+                array[i] = array[i + 1];
+            }
+            array[index] = value;
+
+            for (int i = 0; i < array.length; i++) {
+                System.out.print(array[i] + " ");
+            }
+
+        } else {
+            System.out.println("Index isn't ina array");
+        }
     }
 
 
@@ -28,13 +44,7 @@ public class Test {
                 count++;
             }
         }
-        if (count > 1){
-            return value;
-
-        } else {
-            return -1;
-        }
-
+        return -1;
     }
 
 
@@ -46,22 +56,10 @@ public class Test {
         }
     }
 
-    public  void  add(int index, int value){
-        if (index <= array.length){
-            for (int i = index; i < array.length - 1 ; i++) {
-                array[index] = value;
-                array[i] = array[i + 1];
-            }
-        }
-        else {
-            System.out.println("Index isn't ina array");
-        }
 
-        for (int i = 0; i < array.length; i++) {
-            System.out.print(array[i] + " ");
-        }
 
-    }
+
+
 
     public boolean exist(int value){
         for (int i = 0; i < array.length; i++) {
