@@ -26,6 +26,7 @@ public class Users {
     }
 
     public Users() {
+
     }
 
     public Users(String name, String email, String password, String conPassword, String phoneNumber, short age) {

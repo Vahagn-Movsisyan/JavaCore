@@ -47,11 +47,11 @@ public class BraceChecker {
 
 
                 case '}':
-                    pop = stackForBraces.pop();
                     if (pop != '{') {
                         System.err.println("Error: opened " + (char) pop + " but closed " + text.charAt(i) + " in line " + (i + 1));
                         isCorrectText = false;
                     }
+                    pop = stackForBraces.pop();
                     if (stackForBraces.index == -1) {
                         System.err.println("Error: closed } but not opened");
                         isCorrectText = false;
@@ -66,7 +66,7 @@ public class BraceChecker {
             isCorrectText = false;
         }
 
-        if (isCorrectText) {
+        if (isCorrectText ) {
             System.out.println("Text is correct");
         }
     }
