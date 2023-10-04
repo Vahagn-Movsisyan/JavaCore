@@ -1,8 +1,7 @@
 package homeworks.hm8Emplyoee;
 
-import java.util.Scanner;
-
 public class EmployeeStorage {
+
     private Employee[] employees = new Employee[10];
     private int size;
 
@@ -42,78 +41,64 @@ public class EmployeeStorage {
         if (!isTestCompanyName) System.out.println("Company name " + companyName + " not found");
     }
 
-    public void edit() {
+    public void examEmail(String email) {
+        if (!email.contains("@") || !email.contains("gmail") || !email.contains(".com")) {
+            System.out.println("Invalid email, please try again");
+        }
+    }
 
-        Scanner scanner = new Scanner(System.in);
+    public void examPhoneNumber(String phoneNumber) {
+        if (!phoneNumber.startsWith("+") && phoneNumber.length() != 13) {
+            System.out.println("Invalid phone number, please try again");
+        }
+    }
 
-        System.out.println("Enter the employee ID to edit:");
-        int idEdit = Integer.parseInt(scanner.nextLine());
-        boolean employeeFound = false;
+    public void edit(int employeeID, String newInfo, String value) {
+        boolean isEmployeeFound = false;
 
         for (int i = 0; i < size; i++) {
-            if (employees[i].getEmployeeID() == idEdit) {
-                employeeFound = true;
+            if (employees[i].getEmployeeID() == employeeID) {
+                isEmployeeFound = true;
 
-                System.out.println("""
-                        1. Change Name:
-                        2. Change Surname:
-                        3. Change Company Name:
-                        4. Change Position:
-                        5. Change Salary:
-                        """);
-                String editEmployee = scanner.nextLine();
-
-                switch (editEmployee) {
+                switch (newInfo) {
                     case "1":
-
-                        System.out.println("Enter the new name:");
-                        String newName = scanner.nextLine();
-                        employees[i].setName(newName);
+                        employees[i].setName(value);
                         System.out.println("Name changed successfully.");
                         break;
 
                     case "2":
-
-                        System.out.println("Enter the new surname:");
-                        String newSurname = scanner.nextLine();
-                        employees[i].setSurname(newSurname);
+                        employees[i].setSurname(value);
                         System.out.println("Surname changed successfully.");
                         break;
 
                     case "3":
-
-                        System.out.println("Enter the new company name:");
-                        String newCompanyName = scanner.nextLine();
-                        employees[i].setCompany(newCompanyName);
+                        employees[i].setCompany(value);
                         System.out.println("Company name changed successfully.");
                         break;
 
                     case "4":
-
-                        System.out.println("Enter the new position:");
-                        String newPosition = scanner.nextLine();
-                        employees[i].setPosition(newPosition);
+                        employees[i].setPosition(value);
                         System.out.println("Position changed successfully.");
                         break;
 
                     case "5":
-
-                        System.out.println("Enter the new salary:");
-                        double newSalary = Double.parseDouble(scanner.nextLine());
+                        double newSalary = Double.parseDouble(value);
                         employees[i].setSalary(newSalary);
                         System.out.println("Salary changed successfully.");
                         break;
 
                     default:
-                        System.out.println("You are an entered an error");
+                        System.out.println("Invalid information to edit.");
                         break;
                 }
             }
-            if (!employeeFound) {
-                System.out.println("ID " + idEdit + " isn't found");
-            }
+        }
+
+        if (!isEmployeeFound) {
+            System.out.println("Employee with ID " + employeeID + " not found.");
         }
     }
+
 
     private void printEmployee(Employee employee) {
         System.out.println("Employee Information:");
@@ -135,3 +120,4 @@ public class EmployeeStorage {
         employees = tempArray;
     }
 }
+
