@@ -25,9 +25,19 @@ public class EmployeeDemo {
                 case "3" -> foundEmployeeByID();
                 case "4" -> foundEmployeeByCompanyName();
                 case "5" -> editMetod();
+                case "6" -> deleteEmployeeMetod();
                 default -> System.out.println("You are an entered an error!");
             }
         }
+    }
+
+    private static void deleteEmployeeMetod() {
+        System.out.println("Enter the employee ID, for delete");
+        int employeeIdDelete = Integer.parseInt(scanner.nextLine());
+
+        employeeStorage.deleteEmployee(employeeIdDelete);
+        System.out.println("Employee successfully deleted");
+
     }
 
     private static void editMetod() {
@@ -70,24 +80,42 @@ public class EmployeeDemo {
     }
 
     private static void addEmployee() {
+        boolean isValidEmail;
+        boolean isValidPhoneNumber;
+
+        String email;
+        String phoneNumber;
+
         System.out.println("Enter the name:");
         String name = scanner.nextLine();
         System.out.println("Enter the surname:");
         String surname = scanner.nextLine();
-        System.out.println("Enter the email:");
-        String email = scanner.nextLine();
-        System.out.println("Enter the phone number:");
-        String phoneNumber = scanner.nextLine();
+
+        //Exam email
+        do {
+            System.out.println("Enter the email:");
+            email = scanner.nextLine();
+            employeeStorage.examEmail(email);
+            isValidEmail = employeeStorage.examEmail(email);
+
+        } while (!isValidEmail);
+
+
+        //Exam phone number
+        do {
+            System.out.println("Enter the phone number:");
+            phoneNumber = scanner.nextLine();
+            employeeStorage.examPhoneNumber(phoneNumber);
+            isValidPhoneNumber = employeeStorage.examPhoneNumber(phoneNumber);
+        } while (!isValidPhoneNumber);
+
+
         System.out.println("Enter the company name:");
         String companyName = scanner.nextLine();
         System.out.println("Enter the position:");
         String position = scanner.nextLine();
         System.out.println("Enter the salary:");
         double salary = Double.parseDouble(scanner.nextLine());
-
-        //Exam email and phone number
-        employeeStorage.examEmail(email);
-        employeeStorage.examPhoneNumber(phoneNumber);
 
         Employee employee = new Employee(employeeID, name, surname, email, phoneNumber, companyName, position, salary);
         employeeStorage.add(employee);
@@ -102,6 +130,7 @@ public class EmployeeDemo {
                 3. To search employee by ID:
                 4. To search employee by company name:
                 5. To edit employee information:
+                6. Tp delete employee:
                 0. To exit:
                 """);
     }

@@ -13,9 +13,11 @@ public class EmployeeStorage {
     }
 
     public void print() {
-        for (int i = 0; i < size; i++) {
-            printEmployee(employees[i]);
-        }
+        if (size >= 1) {
+            for (int i = 0; i < size; i++) {
+                printEmployee(employees[i]);
+            }
+        } else System.out.println("There are no current employees at the moment");
     }
 
     public void searchBuyId(int employeeID) {
@@ -41,16 +43,42 @@ public class EmployeeStorage {
         if (!isTestCompanyName) System.out.println("Company name " + companyName + " not found");
     }
 
-    public void examEmail(String email) {
+    public boolean examEmail(String email) {
+        boolean isValidEmail = true;
         if (!email.contains("@") || !email.contains("gmail") || !email.contains(".com")) {
             System.out.println("Invalid email, please try again");
+            isValidEmail = false;
         }
+        return isValidEmail;
     }
 
-    public void examPhoneNumber(String phoneNumber) {
+    public boolean examPhoneNumber(String phoneNumber) {
+        boolean isValidPhoneNumber = true;
         if (!phoneNumber.startsWith("+") && phoneNumber.length() != 13) {
             System.out.println("Invalid phone number, please try again");
+            isValidPhoneNumber = false;
         }
+        return isValidPhoneNumber;
+    }
+
+    public void deleteEmployee(int employeeID) {
+        boolean isEmployeeFound = false;
+
+        for (int i = 0; i < size; i++) {
+            if (employees[i].getEmployeeID() == employeeID) {
+                isEmployeeFound = true;
+
+                for (int j = i; j < size - 1; j++) {
+                    employees[i] = employees[i + 1];
+                }
+
+            }
+        }
+        employees[size - 1] = null;
+        size--;
+
+        if (!isEmployeeFound) System.out.println("Invalid employee ID");
+
     }
 
     public void edit(int employeeID, String newInfo, String value) {
