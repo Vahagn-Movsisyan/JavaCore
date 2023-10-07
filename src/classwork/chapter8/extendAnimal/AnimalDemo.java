@@ -1,20 +1,25 @@
 package classwork.chapter8.extendAnimal;
 
-import java.util.Scanner;
 
 public class AnimalDemo {
 
-    static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
 
-        Animal animal = new Cat();
+        Animal animal = new Animal();
         Dog dog = new Dog();
-
         Cat cat = new Cat();
-        Bear bear = new Bear();
 
         animal.eat();
+
+        animal = dog;
+
+
+        Animal animal1 = new Bear();
+
+        animal.eat();
+        cat.eat();
         dog.eat();
+        animal1.eat();
 
     }
 }

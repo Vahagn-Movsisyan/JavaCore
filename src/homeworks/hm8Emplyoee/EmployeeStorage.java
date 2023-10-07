@@ -81,36 +81,36 @@ public class EmployeeStorage {
 
     }
 
-    public void edit(int employeeID, String newInfo, String value) {
+    public void edit(int employeeID, String choice, String newValue) {
         boolean isEmployeeFound = false;
 
         for (int i = 0; i < size; i++) {
             if (employees[i].getEmployeeID() == employeeID) {
                 isEmployeeFound = true;
 
-                switch (newInfo) {
+                switch (choice) {
                     case "1":
-                        employees[i].setName(value);
+                        employees[i].setName(newValue);
                         System.out.println("Name changed successfully.");
                         break;
 
                     case "2":
-                        employees[i].setSurname(value);
+                        employees[i].setSurname(newValue);
                         System.out.println("Surname changed successfully.");
                         break;
 
                     case "3":
-                        employees[i].setCompany(value);
+                        employees[i].setCompany(newValue);
                         System.out.println("Company name changed successfully.");
                         break;
 
                     case "4":
-                        employees[i].setPosition(value);
+                        employees[i].setPosition(newValue);
                         System.out.println("Position changed successfully.");
                         break;
 
                     case "5":
-                        double newSalary = Double.parseDouble(value);
+                        double newSalary = Double.parseDouble(newValue);
                         employees[i].setSalary(newSalary);
                         System.out.println("Salary changed successfully.");
                         break;

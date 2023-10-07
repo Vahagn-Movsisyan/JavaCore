@@ -2,6 +2,8 @@ package classwork.chapter8.extendAnimal;
 
 public class Dog extends Animal {
 
+    int colorDog;
+
     public void eat() {
         System.out.println("I'm eating foods for dogs");
     }
