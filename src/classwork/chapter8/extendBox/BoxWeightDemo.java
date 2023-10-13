@@ -40,3 +40,5 @@ public class BoxWeightDemo {
         System.out.println("Box shipment is cos " + boxShipment.cost);
     }
 }
+
+

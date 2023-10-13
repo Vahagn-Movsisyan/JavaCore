@@ -1,4 +1,6 @@
-package homeworks.hm8Emplyoee;
+package homeworks.hm8to9Emplyoee.storage;
+
+import homeworks.hm8to9Emplyoee.model.Employee;
 
 public class EmployeeStorage {
 
@@ -126,6 +128,7 @@ public class EmployeeStorage {
             System.out.println("Employee with ID " + employeeID + " not found.");
         }
     }
+
 
 
     private void printEmployee(Employee employee) {

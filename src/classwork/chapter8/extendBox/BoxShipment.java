@@ -5,7 +5,7 @@ public class BoxShipment extends BoxWeight {
 
     BoxShipment(BoxShipment ob) {
         super(ob);
-        cost = ob.cost;
+        cost= ob.cost;
     }
 
     BoxShipment(double width, double height, double depth, double weight, double cost) {

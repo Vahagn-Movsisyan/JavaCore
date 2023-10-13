@@ -1,4 +1,7 @@
-package homeworks.hm8Emplyoee;
+package homeworks.hm8to9Emplyoee;
+
+import homeworks.hm8to9Emplyoee.model.Employee;
+import homeworks.hm8to9Emplyoee.storage.EmployeeStorage;
 
 import java.util.Scanner;
 
@@ -121,6 +124,7 @@ public class EmployeeDemo {
         employeeStorage.add(employee);
         employeeID++;
         System.out.println("Employee is successfully added!");
+
     }
 
     private static void printCommand() {

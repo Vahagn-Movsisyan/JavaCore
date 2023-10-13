@@ -1,4 +1,4 @@
-package homeworks.hm8Emplyoee;
+package homeworks.hm8to9Emplyoee.model;
 
 public class Employee {
     private int employeeID;
