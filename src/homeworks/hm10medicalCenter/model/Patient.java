@@ -1,14 +1,16 @@
 package homeworks.hm10medicalCenter.model;
 
+import homeworks.hm10medicalCenter.util.DateUtil;
+
 import java.util.Date;
 
 public class Patient extends Person {
     private String patientCardID;
     private String selectedDoctor;
-    private  String registerDate;
+    private Date registerDate;
 
 
-    public Patient(String patientCardID, String name, String surName, String phoneNumber, String email, String selectedDoctor, String registerDate) {
+    public Patient(String patientCardID, String name, String surName, String phoneNumber, String email, String selectedDoctor, Date registerDate) {
         super(name, surName, phoneNumber, email);
         this.patientCardID = patientCardID;
         this.selectedDoctor = selectedDoctor;
@@ -19,11 +21,11 @@ public class Patient extends Person {
 
    }
 
-    public String getRegisterDate() {
+    public Date getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(String registerDate) {
+    public void setRegisterDate(Date registerDate) {
         this.registerDate = registerDate;
     }
 
@@ -48,7 +50,7 @@ public class Patient extends Person {
         return "Patient{" +
                 "patientCardID='" + patientCardID + '\'' +
                 ", selectedDoctor=" + selectedDoctor +
-                ", date='" + registerDate + '\'' +
+                ", date='" + DateUtil.dateToString(registerDate) + '\'' +
                 ", name='" + getName() + '\'' +
                 ", surName='" + getSurName() + '\'' +
                 ", phoneNumber='" + getPhoneNumber() + '\'' +

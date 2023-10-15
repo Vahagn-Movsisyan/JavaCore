@@ -5,7 +5,7 @@ import homeworks.hm8to9Emplyoee.storage.EmployeeStorage;
 
 import java.util.Scanner;
 
-public class EmployeeDemo {
+public class EmployeeDemo implements Commands{
 
     static Scanner scanner = new Scanner(System.in);
     static EmployeeStorage employeeStorage = new EmployeeStorage();
@@ -18,7 +18,7 @@ public class EmployeeDemo {
 
         while (isRun) {
 
-            printCommand();
+            Commands.printCommand();
             String selectVariant = scanner.nextLine();
 
             switch (selectVariant) {
@@ -125,17 +125,5 @@ public class EmployeeDemo {
         employeeID++;
         System.out.println("Employee is successfully added!");
 
-    }
-
-    private static void printCommand() {
-        System.out.println("""
-                1. To add employees:
-                2. To watch all employees:
-                3. To search employee by ID:
-                4. To search employee by company name:
-                5. To edit employee information:
-                6. Tp delete employee:
-                0. To exit:
-                """);
     }
 }

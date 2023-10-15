@@ -2,39 +2,55 @@ package homeworks.hm10medicalCenter.storage;
 
 import homeworks.hm10medicalCenter.model.Doctor;
 import homeworks.hm10medicalCenter.model.Patient;
+import homeworks.hm10medicalCenter.model.Person;
 
 
 public class MedicalCenterStorage {
-    Doctor doctor = new Doctor();
-    private Patient[] patients = new Patient[10];
-    private Doctor[] doctors = new Doctor[10];
-    private int patientSize;
-    private int doctorSize;
 
-    public void addPatient(Patient patient) {
-        if (patientSize == patients.length) {
-            extendPatients();
+    Person[] persons = new Person[10];
+
+    private int size;
+
+    public void add(Person person) {
+        if (size == persons.length) {
+            extend();
         }
-        patients[patientSize++] = patient;
+        persons[size++] = person;
+    }
+
+    public void printAllDoctors() {
+        boolean isEmpty = false;
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Doctor && size >= 1){
+                System.out.println(persons[i]);
+                isEmpty = true;
+            }
+        }
+        if (!isEmpty) {
+            System.out.println("No doctor at the moment");
+        }
     }
 
     public void printAllPatients() {
-        if (patientSize >= 1) {
-            for (int i = 0; i < patientSize; i++) {
-                System.out.println(patients[i]);
+       boolean isEmpty = false;
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Patient && size >= 1){
+                System.out.println(persons[i]);
+                isEmpty = true;
             }
-        } else {
+        }
+        if (!isEmpty) {
             System.out.println("No patients at the moment");
         }
     }
 
     public void searchPatientsByDoctorId(String doctorID) {
         boolean isFoundDoctor = false;
-        for (int i = 0; i < patientSize; i++) {
-           if (patients[i].getSelectedDoctor().equals(doctorID)) {
-               System.out.println(patients[i]);
-               isFoundDoctor = true;
-           }
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Patient && ((Patient) persons[i]).getSelectedDoctor().equals(doctorID)) {
+                System.out.println(persons[i]);
+                isFoundDoctor = true;
+            }
         }
         if (!isFoundDoctor) {
             System.out.println("No patients found for the given doctor ID: ");
@@ -42,38 +58,20 @@ public class MedicalCenterStorage {
     }
 
     public Doctor getDoctorByID(String doctorID) {
-        for (int i = 0; i < doctorSize; i++) {
-            if (doctors[i].getDoctorID().equals(doctorID)) {
-                return doctors[i];
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
+                return (Doctor) persons[i];
             }
         }
         return null;
     }
 
-
-    public void addDoctor(Doctor doctor) {
-        if (doctorSize == doctors.length) {
-            extendDoctors();
-        }
-        doctors[doctorSize++] = doctor;
-    }
-
-    public void printAllDoctors() {
-        if (doctorSize >= 1) {
-            for (int i = 0; i < doctorSize; i++) {
-                System.out.println(doctors[i]);
-            }
-        } else {
-            System.out.println("No doctors at the moment");
-        }
-    }
-
     public void searchDoctorByProfession(String doctorProfession) {
         boolean isExamDoctorByProfession = false;
 
-        for (int i = 0; i < doctorSize; i++) {
-            if (doctors[i].getProfession().contains(doctorProfession)) {
-                System.out.println(doctors[i]);
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getProfession().contains(doctorProfession)) {
+                System.out.println(persons[i]);
                 isExamDoctorByProfession = true;
             }
         }
@@ -84,13 +82,13 @@ public class MedicalCenterStorage {
 
     public void deleteDoctorByID(String doctorID) {
         boolean isTestID = false;
-        for (int i = 0; i < doctorSize; i++) {
-            if (doctors[i].getDoctorID().equals(doctorID)) {
-                for (int j = i; j < doctorSize - 1; j++) {
-                    doctors[j] = doctors[j + 1];
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
+                for (int j = i; j < size - 1; j++) {
+                    persons[j] = persons[j + 1];
                 }
-                doctors[doctorSize - 1] = null;
-                doctorSize--;
+                persons[size - 1] = null;
+                size--;
                 isTestID = true;
                 break;
             }
@@ -102,8 +100,9 @@ public class MedicalCenterStorage {
 
     public void changeDoctorByID(String doctorID, String choice, String value) {
         boolean isExamID = false;
-        for (int i = 0; i < doctorSize; i++) {
-            if (doctors[i].getDoctorID().equals(doctorID)) {
+        for (int i = 0; i < size; i++) {
+
+            if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
                 isExamID = true;
 
                 boolean isValidEmail;
@@ -111,31 +110,31 @@ public class MedicalCenterStorage {
 
                 switch (choice) {
                     case "1":
-                        doctors[i].setDoctorID(value);
+                        ((Doctor) persons[i]).setDoctorID(value);
                         System.out.println("Doctor ID changed successfully");
                         break;
                     case "2":
-                        doctors[i].setName(value);
+                        persons[i].setName(value);
                         System.out.println("Name changed successfully");
                         break;
                     case "3":
-                        doctors[i].setSurName(value);
+                        persons[i].setSurName(value);
                         System.out.println("Surname changed successfully");
                         break;
                     case "4":
                         isValidEmail = examEmail(value);
                         if (isValidEmail) {
-                            doctors[i].setEmail(value);
+                            persons[i].setEmail(value);
                         }
                         break;
                     case "5":
                         isValidPhoneNumber = examPhoneNumber(value);
                         if (isValidPhoneNumber) {
-                            doctors[i].setPhoneNumber(value);
+                            persons[i].setPhoneNumber(value);
                         }
                         break;
                     case "6":
-                        doctors[i].setProfession(value);
+                         ((Doctor) persons[i]).setProfession(value);
                         break;
                     default:
                         System.out.println("You have entered an error");
@@ -165,15 +164,9 @@ public class MedicalCenterStorage {
         return isValidPhoneNumber;
     }
 
-    private void extendPatients() {
-        Patient[] tempArrayPatients = new Patient[patients.length + 10];
-        System.arraycopy(patients, 0, tempArrayPatients, 0, patients.length);
-        patients = tempArrayPatients;
-    }
-
-    private void extendDoctors() {
-        Doctor[] tempArrayDoctors = new Doctor[doctors.length + 10];
-        System.arraycopy(doctors, 0, tempArrayDoctors, 0, doctors.length);
-        doctors = tempArrayDoctors;
+    private void extend() {
+        Person[] tempArrayPerson = new Person[persons.length + 10];
+        System.arraycopy(persons, 0, tempArrayPerson, 0, persons.length);
+        persons = tempArrayPerson;
     }
 }

@@ -3,6 +3,7 @@ package homeworks.hm10medicalCenter;
 import homeworks.hm10medicalCenter.model.Doctor;
 import homeworks.hm10medicalCenter.model.Patient;
 import homeworks.hm10medicalCenter.storage.MedicalCenterStorage;
+import homeworks.hm10medicalCenter.util.DateUtil;
 
 
 import java.text.ParseException;
@@ -10,10 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class MedicalCenterTest {
-
+public class MedicalCenterTest implements Commands {
     static Scanner scanner = new Scanner(System.in);
-    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     static MedicalCenterStorage medicalCenterStorage = new MedicalCenterStorage();
 
     public static void main(String[] args) throws ParseException {
@@ -21,19 +20,19 @@ public class MedicalCenterTest {
 
         while (isRun) {
 
-            printCommands();
+            Commands.printCommands();
             String selectVariant = scanner.nextLine();
 
             switch (selectVariant) {
-                case "0" -> isRun = false;
-                case "1" -> addDoctor();
-                case "2" -> searchDoctorByProfession();
-                case "3" -> deleteDoctor();
-                case "4" -> changeDoctorByIDMetod();
-                case "5" -> addPatient();
-                case "6" -> printPatientByDoctorID();
-                case "7" -> printAllPatients();
-                case "8" -> printAllDoctors();
+                case EXIT -> isRun = false;
+                case ADD_DOCTOR -> addDoctor();
+                case SEARCH_DOCTOR_BY_PROFESSION -> searchDoctorByProfession();
+                case DELETE_DOCTOR_BY_ID -> deleteDoctor();
+                case CHANGE_DOCTOR_BT_ID -> changeDoctorByIDMetod();
+                case ADD_PATIENT -> addPatient();
+                case PRINT_PATIENTS_BY_DOCTOR -> printPatientByDoctorID();
+                case PRINT_ALL_PATIENTS -> printAllPatients();
+                case PRINT_ALL_DOCTORS -> printAllDoctors();
             }
         }
     }
@@ -88,9 +87,6 @@ public class MedicalCenterTest {
 
     private static void addPatient() throws ParseException {
 
-        boolean isValidPatientEmail;
-        boolean isValidPatientPhoneNumber;
-
         String patientEmail;
         String patientPhoneNumber;
 
@@ -113,40 +109,26 @@ public class MedicalCenterTest {
         System.out.println("Enter patient surname:");
         String patientSurname = scanner.nextLine();
 
-       do {
-           System.out.println("Enter patient email:");
-           patientEmail = scanner.nextLine();
+        System.out.println("Enter patient email:");
+        patientEmail = scanner.nextLine();
+        medicalCenterStorage.examEmail(patientEmail);
 
-           medicalCenterStorage.examEmail(patientEmail);
-           isValidPatientEmail = medicalCenterStorage.examEmail(patientEmail);
+        System.out.println("Enter patient phone number:");
+        patientPhoneNumber = scanner.nextLine();
+        medicalCenterStorage.examPhoneNumber(patientPhoneNumber);
 
-       } while (!isValidPatientEmail);
-
-       do {
-           System.out.println("Enter patient phone number:");
-           patientPhoneNumber = scanner.nextLine();
-
-           medicalCenterStorage.examPhoneNumber(patientPhoneNumber);
-           isValidPatientPhoneNumber = medicalCenterStorage.examPhoneNumber(patientPhoneNumber);
-
-       } while (!isValidPatientPhoneNumber);
-
-        System.out.println("Enter the date in format(dd/mm/yyyy)");
+        System.out.println("Enter the date in format(dd/mm/yyyy hh:mm)");
         String registerDate = scanner.nextLine();
+        medicalCenterStorage.availableRegisterTime(registerDate);
 
-        Date date = simpleDateFormat.parse(registerDate);
+        Date date = DateUtil.stringToDate(registerDate);
 
-        Patient patient = new Patient(patientCardID, patientName, patientSurname, patientPhoneNumber, patientEmail, doctorID, registerDate);
-        medicalCenterStorage.addPatient(patient);
+        Patient patient = new Patient(patientCardID, patientName, patientSurname, patientPhoneNumber, patientEmail, doctorID, date);
+        medicalCenterStorage.add(patient);
         System.out.println("Patient is successfully added!");
     }
 
    private static void addDoctor() {
-       boolean isValidEmail;
-       boolean isValidPhoneNumber;
-
-       String email;
-       String phoneNumber;
 
        System.out.println("Enter the doctor ID");
        String doctorID = scanner.nextLine();
@@ -156,27 +138,19 @@ public class MedicalCenterTest {
        System.out.println("Enter the surname:");
        String surname = scanner.nextLine();
 
-       do {
-           System.out.println("Enter the email:");
-           email = scanner.nextLine();
-           medicalCenterStorage.examEmail(email);
-           isValidEmail = medicalCenterStorage.examEmail(email);
+       System.out.println("Enter the email:");
+       String email = scanner.nextLine();
+       medicalCenterStorage.examEmail(email);
 
-       } while (!isValidEmail);
-
-       do {
-           System.out.println("Enter the phone number:");
-           phoneNumber = scanner.nextLine();
-           medicalCenterStorage.examPhoneNumber(phoneNumber);
-           isValidPhoneNumber = medicalCenterStorage.examPhoneNumber(phoneNumber);
-       } while (!isValidPhoneNumber);
-
+       System.out.println("Enter the phone number:");
+       String phoneNumber = scanner.nextLine();
+       medicalCenterStorage.examPhoneNumber(phoneNumber);
 
        System.out.println("Enter the profession name:");
        String doctorProfession = scanner.nextLine();
 
        Doctor doctor = new Doctor(name, surname, phoneNumber, email, doctorProfession, doctorID);
-       medicalCenterStorage.addDoctor(doctor);
+       medicalCenterStorage.add(doctor);
        System.out.println("Doctor is successfully added!");
    }
 
@@ -185,18 +159,4 @@ public class MedicalCenterTest {
        String enterDoctorProfession = scanner.nextLine();
        medicalCenterStorage.searchDoctorByProfession(enterDoctorProfession);
    }
-
-    private static void printCommands() {
-        System.out.println("""
-                0 - exit:
-                1 - add doctor:
-                2 - search doctor by profession:
-                3 - delete doctor by id:
-                4 - change doctor by id:
-                5 - add patient:
-                6 - print all patients by doctor:
-                7 - print all patients:
-                8 - print all doctors:
-                """);
-    }
 }

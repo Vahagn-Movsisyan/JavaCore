@@ -1,5 +1,7 @@
 package homeworks.hm10medicalCenter.model;
 
+import java.util.Objects;
+
 public class Doctor extends Person {
 
     private String doctorID;
@@ -30,6 +32,24 @@ public class Doctor extends Person {
 
     public void setProfession(String profession) {
         this.profession = profession;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Doctor doctor = (Doctor) o;
+
+        if (!Objects.equals(doctorID, doctor.doctorID)) return false;
+        return Objects.equals(profession, doctor.profession);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = doctorID != null ? doctorID.hashCode() : 0;
+        result = 31 * result + (profession != null ? profession.hashCode() : 0);
+        return result;
     }
 
     @Override
