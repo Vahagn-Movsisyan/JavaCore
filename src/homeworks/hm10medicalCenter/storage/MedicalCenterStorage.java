@@ -3,6 +3,10 @@ package homeworks.hm10medicalCenter.storage;
 import homeworks.hm10medicalCenter.model.Doctor;
 import homeworks.hm10medicalCenter.model.Patient;
 import homeworks.hm10medicalCenter.model.Person;
+import homeworks.hm10medicalCenter.util.DateUtil;
+
+import java.text.ParseException;
+import java.util.Date;
 
 
 public class MedicalCenterStorage {
@@ -54,6 +58,23 @@ public class MedicalCenterStorage {
         }
         if (!isFoundDoctor) {
             System.out.println("No patients found for the given doctor ID: ");
+        }
+    }
+
+    public void availableDateTime(String registerDate) throws ParseException {
+        Date registerDateTime = DateUtil.stringToDate(registerDate);
+
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Patient){
+
+                Date patientRegisteredDate = ((Patient) persons[i]).getRegisterDate();
+                long dateOfMinutes = (registerDateTime.getTime() - patientRegisteredDate.getTime() / (60 * 1000));
+
+                if (dateOfMinutes < 30) {
+                    System.out.println("DateTime isn't available, try another datetime");
+                    return;
+                }
+            }
         }
     }
 

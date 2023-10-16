@@ -119,7 +119,7 @@ public class MedicalCenterTest implements Commands {
 
         System.out.println("Enter the date in format(dd/mm/yyyy hh:mm)");
         String registerDate = scanner.nextLine();
-        medicalCenterStorage.availableRegisterTime(registerDate);
+        medicalCenterStorage.availableDateTime(registerDate);
 
         Date date = DateUtil.stringToDate(registerDate);
 
