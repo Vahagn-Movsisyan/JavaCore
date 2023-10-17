@@ -95,13 +95,23 @@ public class MedicalCenterTest implements Commands {
         String doctorID = scanner.nextLine();
 
         Doctor doctorFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
-        if (doctorFromStorage == null) {
+
+        while (doctorFromStorage == null) {
             System.out.println("Doctor with ID " + doctorID + " does not exist");
-            return;
+            doctorID = scanner.nextLine();
+            doctorFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
         }
 
         System.out.println("Enter patient card ID:");
         String patientCardID = scanner.nextLine();
+
+        Patient examPatientCardIdFromStorage = medicalCenterStorage.getPatientCardByID(patientCardID);
+
+        while (examPatientCardIdFromStorage != null){
+            System.out.println("This patient card id " + patientCardID + " already added! Please try another card id!");
+            patientCardID = scanner.nextLine();
+            examPatientCardIdFromStorage = medicalCenterStorage.getPatientCardByID(patientCardID);
+        }
 
         System.out.println("Enter patient name:");
         String patientName = scanner.nextLine();
@@ -111,15 +121,28 @@ public class MedicalCenterTest implements Commands {
 
         System.out.println("Enter patient email:");
         patientEmail = scanner.nextLine();
-        medicalCenterStorage.examEmail(patientEmail);
+
+        while (!medicalCenterStorage.examEmail(patientEmail)) {
+            System.out.println("Invalid email, please try again");
+            patientEmail = scanner.nextLine();
+        }
 
         System.out.println("Enter patient phone number:");
         patientPhoneNumber = scanner.nextLine();
-        medicalCenterStorage.examPhoneNumber(patientPhoneNumber);
+
+        while (!medicalCenterStorage.examPhoneNumber(patientPhoneNumber)){
+            System.out.println("Invalid phone number, please try again");
+            patientPhoneNumber = scanner.nextLine();
+        }
 
         System.out.println("Enter the date in format(dd/mm/yyyy hh:mm)");
         String registerDate = scanner.nextLine();
-        medicalCenterStorage.availableDateTime(registerDate);
+        medicalCenterStorage.isAvailableDateTime(registerDate);
+
+        while (!medicalCenterStorage.isAvailableDateTime(registerDate)) {
+            System.out.println("DateTime isn't available, please try another datetime.");
+            registerDate = scanner.nextLine();
+        }
 
         Date date = DateUtil.stringToDate(registerDate);
 
@@ -133,6 +156,14 @@ public class MedicalCenterTest implements Commands {
        System.out.println("Enter the doctor ID");
        String doctorID = scanner.nextLine();
 
+       Doctor examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
+
+       while (examDoctorIdFromStorage != null) {
+           System.out.println("This doctor id " + doctorID + " already added! Please try another card id!");
+           doctorID = scanner.nextLine();
+           examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
+       }
+
        System.out.println("Enter the name:");
        String name = scanner.nextLine();
        System.out.println("Enter the surname:");
@@ -140,11 +171,19 @@ public class MedicalCenterTest implements Commands {
 
        System.out.println("Enter the email:");
        String email = scanner.nextLine();
-       medicalCenterStorage.examEmail(email);
+
+       while (!medicalCenterStorage.examEmail(email)) {
+           System.out.println("Invalid email, please try again");
+           email = scanner.nextLine();
+       }
 
        System.out.println("Enter the phone number:");
        String phoneNumber = scanner.nextLine();
-       medicalCenterStorage.examPhoneNumber(phoneNumber);
+
+       while (!medicalCenterStorage.examPhoneNumber(phoneNumber)) {
+           System.out.println("Invalid phone number, please try again");
+           phoneNumber = scanner.nextLine();
+       }
 
        System.out.println("Enter the profession name:");
        String doctorProfession = scanner.nextLine();
@@ -160,3 +199,4 @@ public class MedicalCenterTest implements Commands {
        medicalCenterStorage.searchDoctorByProfession(enterDoctorProfession);
    }
 }
+

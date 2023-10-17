@@ -61,27 +61,38 @@ public class MedicalCenterStorage {
         }
     }
 
-    public void availableDateTime(String registerDate) throws ParseException {
+
+    public boolean isAvailableDateTime(String registerDate) throws ParseException {
+        boolean idValidDateTime = true;
         Date registerDateTime = DateUtil.stringToDate(registerDate);
 
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Patient){
+            if (persons[i] instanceof Patient) {
 
                 Date patientRegisteredDate = ((Patient) persons[i]).getRegisterDate();
-                long dateOfMinutes = (registerDateTime.getTime() - patientRegisteredDate.getTime() / (60 * 1000));
+                long dateInMinutes = (registerDateTime.getTime() - patientRegisteredDate.getTime()) / 60000;
 
-                if (dateOfMinutes < 30) {
-                    System.out.println("DateTime isn't available, try another datetime");
-                    return;
+                if (dateInMinutes < 30 || patientRegisteredDate.equals(registerDateTime)) {
+                    idValidDateTime = false;
                 }
             }
         }
+        return idValidDateTime;
     }
 
     public Doctor getDoctorByID(String doctorID) {
         for (int i = 0; i < size; i++) {
             if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
                 return (Doctor) persons[i];
+            }
+        }
+        return null;
+    }
+
+    public Patient getPatientCardByID(String patientID) {
+        for (int i = 0; i < size; i++) {
+            if (persons[i] instanceof Patient && ((Patient) persons[i]).getPatientCardID().equals(patientID)) {
+                return (Patient) persons[i];
             }
         }
         return null;
@@ -191,3 +202,4 @@ public class MedicalCenterStorage {
         persons = tempArrayPerson;
     }
 }
+
