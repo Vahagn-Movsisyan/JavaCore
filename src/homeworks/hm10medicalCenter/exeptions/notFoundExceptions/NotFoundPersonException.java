@@ -1,4 +1,4 @@
-package homeworks.hm10medicalCenter.exeptions;
+package homeworks.hm10medicalCenter.exeptions.notFoundExceptions;
 
 public class NotFoundPersonException extends Exception {
 

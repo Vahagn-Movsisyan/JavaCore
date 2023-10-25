@@ -1,6 +1,8 @@
 package homeworks.hm10medicalCenter.storage;
 
-import homeworks.hm10medicalCenter.exeptions.DoublePersonFoundException;
+import homeworks.hm10medicalCenter.exeptions.notFoundExceptions.DoublePersonFoundException;
+import homeworks.hm10medicalCenter.exeptions.notFoundExceptions.NotFoundPersonException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.emailValidation.DoubleEmailFoundException;
 import homeworks.hm10medicalCenter.exeptions.validationExceptions.emailValidation.IncorrectFormatEmailException;
 import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.DoublePhoneNumberFoundException;
 import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.InvalidPhoneNumberFormatException;
@@ -84,7 +86,7 @@ public class MedicalCenterStorage {
         return idValidDateTime;
     }
 
-    public Doctor getDoctorByID(String doctorID) {
+    public Doctor getDoctorByID(String doctorID) throws NotFoundPersonException {
         for (int i = 0; i < size; i++) {
             if (persons[i] instanceof Doctor doctor) {
                 if (doctor.getDoctorID().equals(doctorID)) {
@@ -92,10 +94,10 @@ public class MedicalCenterStorage {
                 }
             }
         }
-        return null;
+        throw new NotFoundPersonException(doctorID + " id dose not found!");
     }
 
-    public Patient getPatientCardByID(String patientID) {
+    public Patient getPatientCardByID(String patientID) throws NotFoundPersonException {
         for (int i = 0; i < size; i++) {
             if (persons[i] instanceof Patient patient) {
                 if (patient.getPatientCardID().equals(patientID)) {
@@ -103,7 +105,7 @@ public class MedicalCenterStorage {
                 }
             }
         }
-        return null;
+        throw new NotFoundPersonException(patientID + " card id dose not found!");
     }
 
     public void searchDoctorByProfession(String doctorProfession) {
@@ -164,7 +166,7 @@ public class MedicalCenterStorage {
                     case "4":
                         try {
                             isValidEmail = examEmail(value);
-                        } catch (DoublePersonFoundException | IncorrectFormatEmailException e) {
+                        } catch (DoubleEmailFoundException| IncorrectFormatEmailException e) {
                             System.out.println(e.getMessage());
                         }
                         if (isValidEmail) {
@@ -195,10 +197,10 @@ public class MedicalCenterStorage {
     }
 
 
-    public boolean examEmail(String email) throws DoublePersonFoundException, IncorrectFormatEmailException {
+    public boolean examEmail(String email) throws DoubleEmailFoundException, IncorrectFormatEmailException {
         for (int i = 0; i < size; i++) {
             if (persons[i] != null && persons[i].getEmail().equals(email)) {
-                throw new DoublePersonFoundException("Email already exists: " + email);
+                throw new DoubleEmailFoundException("Email already exists: " + email);
             }
         }
 

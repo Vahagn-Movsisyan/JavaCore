@@ -1,6 +1,6 @@
-package homeworks.hm10medicalCenter.exeptions;
+package homeworks.hm10medicalCenter.exeptions.notFoundExceptions;
 
-public class DoublePersonFoundException  extends Exception {
+public class DoublePersonFoundException extends Exception {
     public DoublePersonFoundException() {
     }
 
