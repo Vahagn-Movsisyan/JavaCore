@@ -1,6 +1,8 @@
 package homeworks.hm10medicalCenter.model;
 
 
+import java.util.Objects;
+
 public class Person {
     private String name;
     private String surName;
@@ -14,6 +16,26 @@ public class Person {
         this.email = email;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (!Objects.equals(name, person.name)) return false;
+        if (!Objects.equals(surName, person.surName)) return false;
+        if (!Objects.equals(phoneNumber, person.phoneNumber)) return false;
+        return Objects.equals(email, person.email);
+    }
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (surName != null ? surName.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
+    }
 
     public Person() {
     }

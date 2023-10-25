@@ -1,5 +1,9 @@
 package homeworks.hm10medicalCenter;
 
+import homeworks.hm10medicalCenter.exeptions.DoublePersonFoundException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.emailValidation.IncorrectFormatEmailException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.DoublePhoneNumberFoundException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.InvalidPhoneNumberFormatException;
 import homeworks.hm10medicalCenter.model.Doctor;
 import homeworks.hm10medicalCenter.model.Patient;
 import homeworks.hm10medicalCenter.storage.MedicalCenterStorage;
@@ -7,7 +11,6 @@ import homeworks.hm10medicalCenter.util.DateUtil;
 
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -67,9 +70,13 @@ public class MedicalCenterTest implements Commands {
     }
 
     private static void printAllPatients() {
-        System.out.println("--------------------");
-        medicalCenterStorage.printAllPatients();
-        System.out.println("--------------------");
+        try {
+            System.out.println("--------------------");
+            medicalCenterStorage.printAllPatients();
+            System.out.println("--------------------");
+        } catch (NullPointerException e) {
+            System.out.println("Error: in patient information, please check datetime");
+        }
     }
 
     private static void printAllDoctors() {
@@ -85,7 +92,7 @@ public class MedicalCenterTest implements Commands {
         medicalCenterStorage.searchPatientsByDoctorId(doctorID);
     }
 
-    private static void addPatient() throws ParseException {
+    private static void addPatient() {
 
         String patientEmail;
         String patientPhoneNumber;
@@ -107,7 +114,7 @@ public class MedicalCenterTest implements Commands {
 
         Patient examPatientCardIdFromStorage = medicalCenterStorage.getPatientCardByID(patientCardID);
 
-        while (examPatientCardIdFromStorage != null){
+        while (examPatientCardIdFromStorage != null) {
             System.out.println("This patient card id " + patientCardID + " already added! Please try another card id!");
             patientCardID = scanner.nextLine();
             examPatientCardIdFromStorage = medicalCenterStorage.getPatientCardByID(patientCardID);
@@ -122,81 +129,96 @@ public class MedicalCenterTest implements Commands {
         System.out.println("Enter patient email:");
         patientEmail = scanner.nextLine();
 
-        while (!medicalCenterStorage.examEmail(patientEmail)) {
-            System.out.println("Invalid email, please try again");
-            patientEmail = scanner.nextLine();
+
+        try {
+            medicalCenterStorage.examEmail(patientEmail);
+        } catch (DoublePersonFoundException | IncorrectFormatEmailException e) {
+            System.out.println(e.getMessage());
         }
 
         System.out.println("Enter patient phone number:");
         patientPhoneNumber = scanner.nextLine();
 
-        while (!medicalCenterStorage.examPhoneNumber(patientPhoneNumber)){
-            System.out.println("Invalid phone number, please try again");
-            patientPhoneNumber = scanner.nextLine();
+        try {
+            medicalCenterStorage.examPhoneNumber(patientPhoneNumber);
+        } catch (InvalidPhoneNumberFormatException | DoublePhoneNumberFoundException e) {
+            System.out.println(e.getMessage());
         }
 
-        System.out.println("Enter the date in format(dd/mm/yyyy hh:mm)");
-        String registerDate = scanner.nextLine();
-        medicalCenterStorage.isAvailableDateTime(registerDate);
+        Date date = null;
+        String registerDate;
 
-        while (!medicalCenterStorage.isAvailableDateTime(registerDate)) {
-            System.out.println("DateTime isn't available, please try another datetime.");
+        try {
+            System.out.println("Enter the date in format(dd/mm/yyyy hh:mm)");
             registerDate = scanner.nextLine();
-        }
+            medicalCenterStorage.isAvailableDateTime(doctorID, registerDate);
 
-        Date date = DateUtil.stringToDate(registerDate);
+            while (!medicalCenterStorage.isAvailableDateTime(doctorID, registerDate)) {
+                System.out.println("DateTime isn't available, please try another datetime.");
+                registerDate = scanner.nextLine();
+            }
+
+            date = DateUtil.stringToDate(registerDate);
+
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter the date in the correct format (dd/mm/yyyy hh:mm)");
+        }
 
         Patient patient = new Patient(patientCardID, patientName, patientSurname, patientPhoneNumber, patientEmail, doctorID, date);
         medicalCenterStorage.add(patient);
         System.out.println("Patient is successfully added!");
     }
 
-   private static void addDoctor() {
+    private static void addDoctor() {
 
-       System.out.println("Enter the doctor ID");
-       String doctorID = scanner.nextLine();
+        System.out.println("Enter the doctor ID");
+        String doctorID = scanner.nextLine();
 
-       Doctor examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
+        Doctor examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
 
-       while (examDoctorIdFromStorage != null) {
-           System.out.println("This doctor id " + doctorID + " already added! Please try another card id!");
-           doctorID = scanner.nextLine();
-           examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
-       }
+        while (examDoctorIdFromStorage != null) {
+            System.out.println("This doctor id " + doctorID + " already added! Please try another id!");
+            doctorID = scanner.nextLine();
+            examDoctorIdFromStorage = medicalCenterStorage.getDoctorByID(doctorID);
+        }
 
-       System.out.println("Enter the name:");
-       String name = scanner.nextLine();
-       System.out.println("Enter the surname:");
-       String surname = scanner.nextLine();
+        System.out.println("Enter the name:");
+        String name = scanner.nextLine();
+        System.out.println("Enter the surname:");
+        String surname = scanner.nextLine();
 
-       System.out.println("Enter the email:");
-       String email = scanner.nextLine();
+        System.out.println("Enter the email:");
+        String email = scanner.nextLine();
 
-       while (!medicalCenterStorage.examEmail(email)) {
-           System.out.println("Invalid email, please try again");
-           email = scanner.nextLine();
-       }
+        try {
+            medicalCenterStorage.examEmail(email);
+        } catch (DoublePersonFoundException | IncorrectFormatEmailException e) {
+            System.out.println(e.getMessage());
+        }
 
-       System.out.println("Enter the phone number:");
-       String phoneNumber = scanner.nextLine();
 
-       while (!medicalCenterStorage.examPhoneNumber(phoneNumber)) {
-           System.out.println("Invalid phone number, please try again");
-           phoneNumber = scanner.nextLine();
-       }
+        System.out.println("Enter the phone number:");
+        String phoneNumber = scanner.nextLine();
 
-       System.out.println("Enter the profession name:");
-       String doctorProfession = scanner.nextLine();
 
-       Doctor doctor = new Doctor(name, surname, phoneNumber, email, doctorProfession, doctorID);
-       medicalCenterStorage.add(doctor);
-       System.out.println("Doctor is successfully added!");
-   }
+        try {
+            medicalCenterStorage.examPhoneNumber(phoneNumber);
+        } catch (InvalidPhoneNumberFormatException | DoublePhoneNumberFoundException e) {
+            System.out.println(e.getMessage());
+        }
 
-   private static void searchDoctorByProfession() {
-       System.out.println("Enter the doctor profession");
-       String enterDoctorProfession = scanner.nextLine();
-       medicalCenterStorage.searchDoctorByProfession(enterDoctorProfession);
-   }
+        System.out.println("Enter the profession name:");
+        String doctorProfession = scanner.nextLine();
+
+        Doctor doctor = new Doctor(name, surname, phoneNumber, email, doctorProfession, doctorID);
+        medicalCenterStorage.add(doctor);
+        System.out.println("Doctor is successfully added!");
+    }
+
+    private static void searchDoctorByProfession() {
+        System.out.println("Enter the doctor profession");
+        String enterDoctorProfession = scanner.nextLine();
+        medicalCenterStorage.searchDoctorByProfession(enterDoctorProfession);
+    }
 }
 

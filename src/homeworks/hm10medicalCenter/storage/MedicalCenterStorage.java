@@ -1,5 +1,9 @@
 package homeworks.hm10medicalCenter.storage;
 
+import homeworks.hm10medicalCenter.exeptions.DoublePersonFoundException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.emailValidation.IncorrectFormatEmailException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.DoublePhoneNumberFoundException;
+import homeworks.hm10medicalCenter.exeptions.validationExceptions.phoneValidation.InvalidPhoneNumberFormatException;
 import homeworks.hm10medicalCenter.model.Doctor;
 import homeworks.hm10medicalCenter.model.Patient;
 import homeworks.hm10medicalCenter.model.Person;
@@ -25,7 +29,7 @@ public class MedicalCenterStorage {
     public void printAllDoctors() {
         boolean isEmpty = false;
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Doctor && size >= 1){
+            if (persons[i] instanceof Doctor && size >= 1) {
                 System.out.println(persons[i]);
                 isEmpty = true;
             }
@@ -36,9 +40,9 @@ public class MedicalCenterStorage {
     }
 
     public void printAllPatients() {
-       boolean isEmpty = false;
+        boolean isEmpty = false;
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Patient && size >= 1){
+            if (persons[i] instanceof Patient && size >= 1) {
                 System.out.println(persons[i]);
                 isEmpty = true;
             }
@@ -62,17 +66,17 @@ public class MedicalCenterStorage {
     }
 
 
-    public boolean isAvailableDateTime(String registerDate) throws ParseException {
+    public boolean isAvailableDateTime(String doctorID, String registerDate) throws ParseException {
         boolean idValidDateTime = true;
         Date registerDateTime = DateUtil.stringToDate(registerDate);
 
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Patient) {
+            if (persons[i] instanceof Patient patient && patient.getSelectedDoctor().equals(doctorID)) {
 
                 Date patientRegisteredDate = ((Patient) persons[i]).getRegisterDate();
                 long dateInMinutes = (registerDateTime.getTime() - patientRegisteredDate.getTime()) / 60000;
 
-                if (dateInMinutes < 30 || patientRegisteredDate.equals(registerDateTime)) {
+                if (dateInMinutes > -30 && dateInMinutes < 30 || patientRegisteredDate.equals(registerDateTime)) {
                     idValidDateTime = false;
                 }
             }
@@ -82,8 +86,10 @@ public class MedicalCenterStorage {
 
     public Doctor getDoctorByID(String doctorID) {
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
-                return (Doctor) persons[i];
+            if (persons[i] instanceof Doctor doctor) {
+                if (doctor.getDoctorID().equals(doctorID)) {
+                    return (Doctor) persons[i];
+                }
             }
         }
         return null;
@@ -91,8 +97,10 @@ public class MedicalCenterStorage {
 
     public Patient getPatientCardByID(String patientID) {
         for (int i = 0; i < size; i++) {
-            if (persons[i] instanceof Patient && ((Patient) persons[i]).getPatientCardID().equals(patientID)) {
-                return (Patient) persons[i];
+            if (persons[i] instanceof Patient patient) {
+                if (patient.getPatientCardID().equals(patientID)) {
+                    return (Patient) persons[i];
+                }
             }
         }
         return null;
@@ -137,8 +145,8 @@ public class MedicalCenterStorage {
             if (persons[i] instanceof Doctor && ((Doctor) persons[i]).getDoctorID().equals(doctorID)) {
                 isExamID = true;
 
-                boolean isValidEmail;
-                boolean isValidPhoneNumber;
+                boolean isValidEmail = false;
+                boolean isValidPhoneNumber = false;
 
                 switch (choice) {
                     case "1":
@@ -154,19 +162,27 @@ public class MedicalCenterStorage {
                         System.out.println("Surname changed successfully");
                         break;
                     case "4":
-                        isValidEmail = examEmail(value);
+                        try {
+                            isValidEmail = examEmail(value);
+                        } catch (DoublePersonFoundException | IncorrectFormatEmailException e) {
+                            System.out.println(e.getMessage());
+                        }
                         if (isValidEmail) {
                             persons[i].setEmail(value);
                         }
                         break;
                     case "5":
-                        isValidPhoneNumber = examPhoneNumber(value);
+                        try {
+                            isValidPhoneNumber = examPhoneNumber(value);
+                        } catch (InvalidPhoneNumberFormatException | DoublePhoneNumberFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
                         if (isValidPhoneNumber) {
                             persons[i].setPhoneNumber(value);
                         }
                         break;
                     case "6":
-                         ((Doctor) persons[i]).setProfession(value);
+                        ((Doctor) persons[i]).setProfession(value);
                         break;
                     default:
                         System.out.println("You have entered an error");
@@ -178,22 +194,30 @@ public class MedicalCenterStorage {
         }
     }
 
-    public boolean examEmail(String email) {
-        boolean isValidEmail = true;
-        if (!email.contains("@") || !email.contains("gmail") || !email.contains(".com")) {
-            System.out.println("Invalid email, please try again");
-            isValidEmail = false;
+
+    public boolean examEmail(String email) throws DoublePersonFoundException, IncorrectFormatEmailException {
+        for (int i = 0; i < size; i++) {
+            if (persons[i] != null && persons[i].getEmail().equals(email)) {
+                throw new DoublePersonFoundException("Email already exists: " + email);
+            }
         }
-        return isValidEmail;
+
+        if (!email.contains("@") || !email.contains("gmail") || !email.contains(".com")) {
+            throw new IncorrectFormatEmailException("Invalid email format");
+        }
+        return true;
     }
 
-    public boolean examPhoneNumber(String phoneNumber) {
-        boolean isValidPhoneNumber = true;
-        if (!phoneNumber.startsWith("+") && phoneNumber.length() != 13 && !phoneNumber.matches("\\+[0-9]+")) {
-            System.out.println("Invalid phone number, please try again");
-            isValidPhoneNumber = false;
+    public boolean examPhoneNumber(String phoneNumber) throws InvalidPhoneNumberFormatException, DoublePhoneNumberFoundException {
+        for (int i = 0; i < size; i++) {
+            if (persons[i] != null && persons[i].getPhoneNumber().equals(phoneNumber)) {
+                throw new DoublePhoneNumberFoundException(phoneNumber + " phone number already exist");
+            }
         }
-        return isValidPhoneNumber;
+        if (!phoneNumber.startsWith("+") && phoneNumber.length() != 13 && !phoneNumber.matches("\\+[0-9]+")) {
+            throw new InvalidPhoneNumberFormatException(phoneNumber + " Invalid phone number format");
+        }
+        return true;
     }
 
     private void extend() {
