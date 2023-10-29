@@ -1,6 +1,6 @@
 package homeworks.hm11onlineMarket.storage;
 
-import homeworks.hm11onlineMarket.enums.UserType;
+import homeworks.hm11onlineMarket.model.enums.UserType;
 import homeworks.hm11onlineMarket.model.User;
 
 public class UserStorage {

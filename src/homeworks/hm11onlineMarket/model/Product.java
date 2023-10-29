@@ -1,6 +1,6 @@
 package homeworks.hm11onlineMarket.model;
 
-import homeworks.hm11onlineMarket.enums.ProductType;
+import homeworks.hm11onlineMarket.model.enums.ProductType;
 
 public class Product {
     private int id;

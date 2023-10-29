@@ -1,6 +1,6 @@
 package homeworks.hm11onlineMarket.model;
 
-import homeworks.hm11onlineMarket.enums.UserType;
+import homeworks.hm11onlineMarket.model.enums.UserType;
 
 public class User {
     private int id;

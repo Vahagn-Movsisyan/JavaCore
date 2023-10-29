@@ -1,36 +1,39 @@
 package homeworks.hm11onlineMarket.model;
 
-import homeworks.hm11onlineMarket.enums.PaymentMethod;
+import homeworks.hm11onlineMarket.model.enums.OrderStatus;
+import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 
-import javax.xml.crypto.Data;
+import java.util.Date;
 
 public class Order {
-    private int id;
+    private String id;
     private User user;
     private Product product;
-    private Data data;
+    private Date date;
     private double price;
     private int quantity;
+    private OrderStatus orderStatus;
     private PaymentMethod paymentMethod;
 
-    public Order(int id, User user, Product product, Data data, double price, int quantity, PaymentMethod paymentMethod) {
+    public Order(String id, User user, Product product, Date data, double price, int quantity, OrderStatus orderStatus, PaymentMethod paymentMethod) {
         this.id = id;
         this.user = user;
         this.product = product;
-        this.data = data;
+        this.date = data;
         this.price = price;
         this.quantity = quantity;
+        this.orderStatus = orderStatus;
         this.paymentMethod = paymentMethod;
     }
 
     public Order() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -50,12 +53,12 @@ public class Order {
         this.product = product;
     }
 
-    public Data getData() {
-        return data;
+    public Date getData() {
+        return date;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setData(Date data) {
+        this.date = data;
     }
 
     public double getPrice() {
@@ -74,6 +77,14 @@ public class Order {
         this.quantity = quantity;
     }
 
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
@@ -88,7 +99,7 @@ public class Order {
                 "id=" + id +
                 ", user=" + user +
                 ", product=" + product +
-                ", data=" + data +
+                ", data=" + date +
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", paymentMethod=" + paymentMethod +

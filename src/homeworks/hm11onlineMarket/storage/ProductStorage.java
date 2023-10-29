@@ -1,10 +1,8 @@
 package homeworks.hm11onlineMarket.storage;
 
-import homeworks.hm11onlineMarket.enums.ProductType;
-import homeworks.hm11onlineMarket.enums.UserType;
+import homeworks.hm11onlineMarket.model.enums.ProductType;
 import homeworks.hm11onlineMarket.exeption.OutOfStockException;
 import homeworks.hm11onlineMarket.model.Product;
-import homeworks.hm11onlineMarket.model.User;
 
 public class ProductStorage {
     private Product[] products = new Product[10];
@@ -60,8 +58,8 @@ public class ProductStorage {
         for (int i = 0; i < size; i++) {
             Product product = products[i];
             if (String.valueOf(product.getId()).equals(searchCriteria)
-                    || product.getName().equalsIgnoreCase(searchCriteria)
-                    || product.getDescription().equalsIgnoreCase(searchCriteria)) {
+                    || product.getName().contains(searchCriteria)
+                    || product.getDescription().contains(searchCriteria)) {
                 System.out.println(product);
                 exist = true;
             }
