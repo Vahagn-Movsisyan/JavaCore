@@ -96,12 +96,13 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", user=" + user +
                 ", product=" + product +
-                ", data=" + date +
+                ", date=" + date +
                 ", price=" + price +
                 ", quantity=" + quantity +
+                ", orderStatus=" + orderStatus +
                 ", paymentMethod=" + paymentMethod +
                 '}';
     }

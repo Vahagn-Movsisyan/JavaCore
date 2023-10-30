@@ -32,25 +32,15 @@ public class OrderStorage {
                 orders[i].setOrderStatus(orderStatus);
                 exist = true;
             }
+
         }
         if (!exist) System.out.println(orderId + " id dose not found");
-    }
-
-    public void printAllOrders() {
-        boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            if (size >= 1) {
-                System.out.println(orders[i]);
-                exist = true;
-            }
-        }
-        if (!exist) System.out.println("Not orders at the moment");
     }
 
     public void printUserMyOrders(int userId) {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (orders[i].getUser().getId() == userId) {
+            if (orders[i].getUser().getId() == userId && size >= 1) {
                 System.out.println(orders[i]);
             }
         }
@@ -69,6 +59,35 @@ public class OrderStorage {
         for (PaymentMethod paymentMethod : paymentMethods) {
             System.out.println(paymentMethod);
         }
+    }
+
+    public void printAllOrders() {
+        boolean exist = false;
+        for (int i = 0; i < size; i++) {
+            if (size >= 1) {
+                System.out.println(orders[i]);
+                exist = true;
+            }
+        }
+        if (!exist) System.out.println("Not orders at the moment");
+    }
+
+    public int getOrderQuantity(String orderId) {
+        for (int i = 0; i < size; i++) {
+            if (orders[i].getId().equals(orderId)) {
+                return orders[i].getQuantity();
+            }
+        }
+        return 0;
+    }
+
+    public OrderStatus getOrderStatus(String orderId) {
+        for (int i = 0; i < size; i++) {
+            if (orders[i].getId().equals(orderId)) {
+                return orders[i].getOrderStatus();
+            }
+        }
+        return null;
     }
 
     public Order getOrderById(String orderId) {

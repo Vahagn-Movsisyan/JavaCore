@@ -1,6 +1,5 @@
 package homeworks.hm11onlineMarket;
 
-
 import homeworks.hm11onlineMarket.command.CommandsForAdmin;
 import homeworks.hm11onlineMarket.command.CommandsForGlobalMenu;
 import homeworks.hm11onlineMarket.command.CommandsForUser;
@@ -110,8 +109,8 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
 
             PaymentMethod paymentMethod;
             try {
-                paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
                 toCountProductPriceByQuantity = productStorage.toCountProductPriceByQuantity(quantity);
+                paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
             } catch (OutOfStockException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());
                 return;
@@ -125,11 +124,13 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             String acceptOrder = scanner.nextLine();
 
             if (acceptOrder.equalsIgnoreCase("yes")) {
-                User user = new User();
-                Product product = new Product();
+                User userFromStorage = userStorage.getUserById(userId);
+                Product productFromStorage = productStorage.getProductById(productId);
                 Date date = new Date();
-                Order order = new Order(orderId, user, product, date, toCountProductPriceByQuantity, quantity, OrderStatus.NEW, paymentMethod);
-                orderStorage.addOrder(order);
+                if (userFromStorage != null && productFromStorage != null) {
+                    Order order = new Order(orderId, userFromStorage, productFromStorage, date, toCountProductPriceByQuantity, quantity, OrderStatus.NEW, paymentMethod);
+                    orderStorage.addOrder(order);
+                } else return;
                 System.out.println("Order placed successfully.");
             } else System.out.println("Payment is cancelled");
         }
@@ -251,9 +252,9 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
         System.out.println("Login successful");
 
         if (isLogin) {
-            if (userOrAdmin == UserType.ADMIN) {
+            if (userStorage.getUserType(userId) == UserType.ADMIN) {
                 adminCommands();
-            } else if (userOrAdmin == UserType.USER) {
+            } else if (userStorage.getUserType(userId) == UserType.USER) {
                 userCommands();
             }
         } else System.out.println("Invalid Login, please try again");

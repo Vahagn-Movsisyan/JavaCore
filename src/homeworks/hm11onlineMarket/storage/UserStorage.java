@@ -36,6 +36,15 @@ public class UserStorage {
         return null;
     }
 
+    public UserType getUserType(int userId) {
+        for (int i = 0; i < size; i++) {
+            if (users[i].getId() == userId) {
+                return users[i].getUserType();
+            }
+        }
+        return null;
+    }
+
     public boolean isLoginValid(String email, String password) {
         for (int i = 0; i < size; i++) {
             if (users[i] != null && users[i].getEmail() != null && users[i].getPassword() != null &&

@@ -1,5 +1,6 @@
 package homeworks.hm11onlineMarket.storage;
 
+import homeworks.hm11onlineMarket.model.enums.OrderStatus;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
 import homeworks.hm11onlineMarket.exeption.OutOfStockException;
 import homeworks.hm11onlineMarket.model.Product;
@@ -34,12 +35,13 @@ public class ProductStorage {
 
     public int toCountProductPriceByQuantity(int quantity) throws OutOfStockException {
         for (int i = 0; i < size; i++) {
-            if (products[i].getStockQty() >= quantity){
+            if (products[i].getStockQty() > quantity) {
                 return (int) (products[i].getPrice() * quantity);
             }
         }
         throw new OutOfStockException(quantity + " this quantity dose not available, please try another quantity");
     }
+
     public void printAllProducts() {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
@@ -68,7 +70,7 @@ public class ProductStorage {
             System.out.println("Product does not found");
         }
     }
-    
+
     public void printAllProductType() {
         ProductType[] productTypes = ProductType.values();
         for (ProductType productType : productTypes) {
