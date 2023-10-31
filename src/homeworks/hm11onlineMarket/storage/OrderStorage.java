@@ -26,21 +26,23 @@ public class OrderStorage {
     }
 
     public void changeOrderStatus(OrderStatus orderStatus, String orderId) {
+        ProductStorage productStorage = new ProductStorage();
         boolean exist = false;
+
         for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId)) {
+            if (orders[i].getId().equals(orderId) && orderStatus == OrderStatus.DELIVERED) {
                 orders[i].setOrderStatus(orderStatus);
+                productStorage.handleDelivery(orders[i].getProduct(), orders[i].getQuantity());
                 exist = true;
             }
-
         }
-        if (!exist) System.out.println(orderId + " id dose not found");
+        if (!exist) System.out.println(orderId + " id dose not found!");
     }
 
-    public void printUserMyOrders(int userId) {
+    public void printUserMyOrders(String userId) {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (orders[i].getUser().getId() == userId && size >= 1) {
+            if (orders[i].getUser().getId().equals(userId) && size >= 1) {
                 System.out.println(orders[i]);
             }
         }
@@ -70,24 +72,6 @@ public class OrderStorage {
             }
         }
         if (!exist) System.out.println("Not orders at the moment");
-    }
-
-    public int getOrderQuantity(String orderId) {
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId)) {
-                return orders[i].getQuantity();
-            }
-        }
-        return 0;
-    }
-
-    public OrderStatus getOrderStatus(String orderId) {
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId)) {
-                return orders[i].getOrderStatus();
-            }
-        }
-        return null;
     }
 
     public Order getOrderById(String orderId) {

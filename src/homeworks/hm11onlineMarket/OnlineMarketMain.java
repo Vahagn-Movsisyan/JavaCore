@@ -24,11 +24,10 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     static OrderStorage orderStorage = new OrderStorage();
     static ProductStorage productStorage = new ProductStorage();
     static UserStorage userStorage = new UserStorage();
-    static GenerateUUID stringToUUid = new GenerateUUID();
-    static int userId = 12345;
-    static int productId = 11234;
-    static String orderId = stringToUUid.uuid();
-    static UserType userOrAdmin;
+    static GenerateUUID generateUUID = new GenerateUUID();
+    static String userId = generateUUID.uuid();
+    static String productId = generateUUID.uuid();
+    static String orderId = generateUUID.uuid();
 
     public static void main(String[] args) {
         boolean isRune = true;
@@ -99,7 +98,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
         double toCountProductPriceByQuantity;
         System.out.println("Please choice product by id");
         productStorage.printAllProducts();
-        int choiceProductById = Integer.parseInt(scanner.nextLine());
+        String choiceProductById = scanner.nextLine();
 
         if (productStorage.getProductById(choiceProductById) != null) {
             System.out.println("Please choice quantity product with you want to buy:");
@@ -130,9 +129,13 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
                 if (userFromStorage != null && productFromStorage != null) {
                     Order order = new Order(orderId, userFromStorage, productFromStorage, date, toCountProductPriceByQuantity, quantity, OrderStatus.NEW, paymentMethod);
                     orderStorage.addOrder(order);
-                } else return;
-                System.out.println("Order placed successfully.");
-            } else System.out.println("Payment is cancelled");
+                    System.out.println("Order placed successfully.");
+                } else {
+                    System.out.println("Invalid payment");
+                }
+            } else {
+                System.out.println("Payment is cancelled");
+            }
         }
     }
 
@@ -163,7 +166,8 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     private static void deleteProductById() {
         printAllProducts();
         System.out.println("Enter product id for delete");
-        int productId = Integer.parseInt(scanner.nextLine());
+        String productId = scanner.nextLine();
+
         if (productStorage.getProductById(productId) != null) {
             productStorage.deleteProductById(productId);
             System.out.println("Product with id " + productId + " successful deleted");
@@ -194,13 +198,13 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             ProductType productType = ProductType.valueOf(scanner.nextLine().toUpperCase());
             Product product = new Product(productId, stockQty, name, description, price, productType);
             productStorage.addProduct(product);
-            productId++;
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
     private static void register() {
+        UserType userOrAdmin;
         boolean isRegister;
 
         try {
@@ -232,7 +236,6 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
 
         User user = new User(userId, name, email, password, userOrAdmin);
         userStorage.addUser(user);
-        userId++;
         System.out.println("Registration successful");
         if (userOrAdmin == UserType.ADMIN) {
             adminCommands();
@@ -249,7 +252,6 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
         String password = scanner.nextLine();
 
         isLogin = userStorage.isLoginValid(email, password);
-        System.out.println("Login successful");
 
         if (isLogin) {
             if (userStorage.getUserType(userId) == UserType.ADMIN) {

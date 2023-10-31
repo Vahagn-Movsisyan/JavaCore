@@ -3,14 +3,14 @@ package homeworks.hm11onlineMarket.model;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
 
 public class Product {
-    private int id;
+    private String id;
     private int stockQty;
     private String name;
     private String description;
     private double price;
     private ProductType productType;
 
-    public Product(int id, int stockQty, String name, String description, double price, ProductType productType) {
+    public Product(String id, int stockQty, String name, String description, double price, ProductType productType) {
         this.id = id;
         this.stockQty = stockQty;
         this.name = name;
@@ -23,11 +23,11 @@ public class Product {
 
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

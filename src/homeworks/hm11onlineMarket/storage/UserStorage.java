@@ -27,18 +27,19 @@ public class UserStorage {
         }
     }
 
-    public User getUserById(int userId) {
+
+    public User getUserById(String userId) {
         for (int i = 0; i < size; i++) {
-            if (users[i].getId() == userId) {
+            if (users[i].getId().equals(userId)) {
                 return users[i];
             }
         }
         return null;
     }
 
-    public UserType getUserType(int userId) {
+    public UserType getUserType(String userId) {
         for (int i = 0; i < size; i++) {
-            if (users[i].getId() == userId) {
+            if (users[i].getId().equals(userId)) {
                 return users[i].getUserType();
             }
         }

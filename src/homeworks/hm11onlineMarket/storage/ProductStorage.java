@@ -9,6 +9,7 @@ public class ProductStorage {
     private Product[] products = new Product[10];
     private int size;
 
+
     public void addProduct(Product product) {
         if (products.length == size) {
             extend();
@@ -16,10 +17,10 @@ public class ProductStorage {
         products[size++] = product;
     }
 
-    public void deleteProductById(int productId) {
+    public void deleteProductById(String productId) {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (products[i].getId() == productId) {
+            if (products[i].getId().equals(productId)) {
                 for (int j = i; j < size; j++) {
                     products[j] = products[j + 1];
                 }
@@ -59,7 +60,7 @@ public class ProductStorage {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
             Product product = products[i];
-            if (String.valueOf(product.getId()).equals(searchCriteria)
+            if (product.getId().equals(searchCriteria)
                     || product.getName().contains(searchCriteria)
                     || product.getDescription().contains(searchCriteria)) {
                 System.out.println(product);
@@ -71,6 +72,14 @@ public class ProductStorage {
         }
     }
 
+    public void handleDelivery(Product product, int deliveredQuantity) {
+        if (product.getStockQty() >= deliveredQuantity) {
+            product.setStockQty(product.getStockQty() - deliveredQuantity);
+        } else {
+            System.out.println("Insufficient stock for product: " + product.getName());
+        }
+    }
+
     public void printAllProductType() {
         ProductType[] productTypes = ProductType.values();
         for (ProductType productType : productTypes) {
@@ -78,9 +87,9 @@ public class ProductStorage {
         }
     }
 
-    public Product getProductById(int productId) {
+    public Product getProductById(String productId) {
         for (int i = 0; i < size; i++) {
-            if (products[i].getId() == productId) {
+            if (products[i].getId().equals(productId)) {
                 return products[i];
             }
         }
