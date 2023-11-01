@@ -27,6 +27,15 @@ public class UserStorage {
         }
     }
 
+    public User getUserBYEmailAndPassword(String email, String password) {
+        for (int i = 0; i < size; i++) {
+            if (users[i] != null && users[i].getEmail() != null && users[i].getPassword() != null &&
+                    users[i].getEmail().equals(email) && users[i].getPassword().equals(password)) {
+                return users[i];
+            }
+        }
+        return null;
+    }
 
     public User getUserById(String userId) {
         for (int i = 0; i < size; i++) {
@@ -44,17 +53,6 @@ public class UserStorage {
             }
         }
         return null;
-    }
-
-    public boolean isLoginValid(String email, String password) {
-        for (int i = 0; i < size; i++) {
-            if (users[i] != null && users[i].getEmail() != null && users[i].getPassword() != null &&
-                    users[i].getEmail().equals(email) && users[i].getPassword().equals(password)) {
-                return true;
-            }
-        }
-        System.out.println("Invalid email or password");
-        return false;
     }
 
     public boolean isValidEmail(String email) {

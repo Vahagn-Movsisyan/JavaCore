@@ -33,9 +33,9 @@ public class ProductStorage {
         }
     }
 
-    public int toCountProductPriceByQuantity(int quantity) throws OutOfStockException {
+    public int toCountProductPriceByQuantity(String productId, int quantity) throws OutOfStockException {
         for (int i = 0; i < size; i++) {
-            if (products[i].getStockQty() > quantity) {
+            if (products[i].getId().equals(productId) && products[i].getStockQty() > quantity) {
                 return (int) (products[i].getPrice() * quantity);
             }
         }

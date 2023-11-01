@@ -25,9 +25,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     static ProductStorage productStorage = new ProductStorage();
     static UserStorage userStorage = new UserStorage();
     static GenerateUUID generateUUID = new GenerateUUID();
-    static String userId = generateUUID.uuid();
-    static String productId = generateUUID.uuid();
-    static String orderId = generateUUID.uuid();
+    static User currentUser = null;
 
     public static void main(String[] args) {
         boolean isRune = true;
@@ -50,7 +48,10 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             CommandsForUser.printCommandsForUser();
             String choiceUser = scanner.nextLine();
             switch (choiceUser) {
-                case CommandsForUser.LOGOUT -> isRun = false;
+                case CommandsForUser.LOGOUT -> {
+                    isRun = false;
+                    currentUser = null;
+                }
                 case PRINT_ALL_PRODUCTS -> printAllProducts();
                 case BUY_PRODUCT -> buyProduct();
                 case PRINT_MY_ORDERS -> printUserMyOrder();
@@ -66,7 +67,10 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             CommandsForAdmin.printCommandsForAdmin();
             String choiceAdmin = scanner.nextLine();
             switch (choiceAdmin) {
-                case CommandsForAdmin.LOGOUT -> isRun = false;
+                case CommandsForAdmin.LOGOUT -> {
+                    isRun = false;
+                    currentUser = null;
+                }
                 case ADD_PRODUCT -> addProduct();
                 case REMOVE_PRODUCT_BY_ID -> deleteProductById();
                 case PRINT_PRODUCTS -> printAllProducts();
@@ -84,21 +88,22 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     }
 
     private static void changeOrderStatus() {
-       try {
-           System.out.println("Enter order id:");
-           String orderId = scanner.nextLine();
-           if (orderStorage.getOrderById(orderId) != null) {
-               System.out.println("Enter new status:");
-               orderStorage.printAllOrderStatus();
-               OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine());
-               orderStorage.changeOrderStatus(orderStatus, orderId);
-           } else System.out.println(orderId + " id dose not found");
-       } catch (IllegalArgumentException e) {
-           System.out.println(e.getMessage());
-       }
+        try {
+            System.out.println("Enter order id:");
+            String orderId = scanner.nextLine();
+            if (orderStorage.getOrderById(orderId) != null) {
+                System.out.println("Enter new status:");
+                orderStorage.printAllOrderStatus();
+                OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine().toUpperCase());
+                orderStorage.changeOrderStatus(orderStatus, orderId);
+            } else System.out.println(orderId + " id dose not found");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void buyProduct() {
+        String orderId = generateUUID.uuid();
         double toCountProductPriceByQuantity;
         System.out.println("Please choice product by id");
         productStorage.printAllProducts();
@@ -112,7 +117,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
 
             PaymentMethod paymentMethod;
             try {
-                toCountProductPriceByQuantity = productStorage.toCountProductPriceByQuantity(quantity);
+                toCountProductPriceByQuantity = productStorage.toCountProductPriceByQuantity(choiceProductById,quantity);
                 paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
             } catch (OutOfStockException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -127,18 +132,18 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             String acceptOrder = scanner.nextLine();
 
             if (acceptOrder.equalsIgnoreCase("yes")) {
-                User userFromStorage = userStorage.getUserById(userId);
-                Product productFromStorage = productStorage.getProductById(productId);
+                User userFromStorage = userStorage.getUserById(currentUser.getId());
+                Product productFromStorage = productStorage.getProductById(choiceProductById);
                 Date date = new Date();
                 if (userFromStorage != null && productFromStorage != null) {
                     Order order = new Order(orderId, userFromStorage, productFromStorage, date, toCountProductPriceByQuantity, quantity, OrderStatus.NEW, paymentMethod);
                     orderStorage.addOrder(order);
                     System.out.println("Order placed successfully.");
                 } else {
-                    System.out.println("Invalid payment");
+                    System.out.println("Payment is cancelled");
                 }
             } else {
-                System.out.println("Payment is cancelled");
+                System.out.println("Invalid payment");
             }
         }
     }
@@ -163,7 +168,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
 
     private static void printUserMyOrder() {
         System.out.println("--------------");
-        orderStorage.printUserMyOrders(userId);
+        orderStorage.printUserMyOrders(currentUser.getId());
         System.out.println("--------------");
     }
 
@@ -189,6 +194,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     }
 
     private static void addProduct() {
+        String productId = generateUUID.uuid();
         try {
             System.out.println("Enter product stockQty:");
             int stockQty = Integer.parseInt(scanner.nextLine());
@@ -208,6 +214,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     }
 
     private static void register() {
+        String userId = generateUUID.uuid();
         UserType userOrAdmin;
         boolean isRegister;
 
@@ -239,7 +246,9 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
         }
 
         User user = new User(userId, name, email, password, userOrAdmin);
+        currentUser = user;
         userStorage.addUser(user);
+
         System.out.println("Registration successful");
         if (userOrAdmin == UserType.ADMIN) {
             adminCommands();
@@ -249,18 +258,17 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     }
 
     private static void login() {
-        boolean isLogin;
         System.out.println("Enter email:");
         String email = scanner.nextLine();
         System.out.println("Enter password:");
         String password = scanner.nextLine();
 
-        isLogin = userStorage.isLoginValid(email, password);
+        currentUser = userStorage.getUserBYEmailAndPassword(email, password);
 
-        if (isLogin) {
-            if (userStorage.getUserType(userId) == UserType.ADMIN) {
+        if (currentUser != null) {
+            if (currentUser.getUserType() == UserType.ADMIN) {
                 adminCommands();
-            } else if (userStorage.getUserType(userId) == UserType.USER) {
+            } else if (currentUser.getUserType() == UserType.USER) {
                 userCommands();
             }
         } else System.out.println("Invalid Login, please try again");
