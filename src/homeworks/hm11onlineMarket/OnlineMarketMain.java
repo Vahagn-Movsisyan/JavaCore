@@ -84,14 +84,18 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     }
 
     private static void changeOrderStatus() {
-        System.out.println("Enter order id:");
-        String orderId = scanner.nextLine();
-        if (orderStorage.getOrderById(orderId) != null) {
-            System.out.println("Enter new status:");
-            orderStorage.printAllOrderStatus();
-            OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine());
-            orderStorage.changeOrderStatus(orderStatus, orderId);
-        } else System.out.println(orderId + " id dose not found");
+       try {
+           System.out.println("Enter order id:");
+           String orderId = scanner.nextLine();
+           if (orderStorage.getOrderById(orderId) != null) {
+               System.out.println("Enter new status:");
+               orderStorage.printAllOrderStatus();
+               OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine());
+               orderStorage.changeOrderStatus(orderStatus, orderId);
+           } else System.out.println(orderId + " id dose not found");
+       } catch (IllegalArgumentException e) {
+           System.out.println(e.getMessage());
+       }
     }
 
     private static void buyProduct() {
