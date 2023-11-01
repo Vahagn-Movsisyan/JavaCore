@@ -12,11 +12,7 @@ public class OrderStorage {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
             if (orders[i].getId().equals(orderId)) {
-                for (int j = i; j < size; j++) {
-                    orders[j] = orders[j + 1];
-                }
-                orders[size - 1] = null;
-                size--;
+                orders[i].setOrderStatus(OrderStatus.CANCELED);
                 exist = true;
             }
         }
