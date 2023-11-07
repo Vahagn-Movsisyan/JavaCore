@@ -8,9 +8,9 @@ import java.io.*;
 
 public abstract class StorageSerializeUtil {
 
-    private static final String USER_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\userStorage.data";
-    private static final String PRODUCT_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\productStorage.data";
-    private static final String ORDER_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\orderStorage.data";
+    private static final String USER_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\userStorage.dat";
+    private static final String PRODUCT_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\productStorage.dat";
+    private static final String ORDER_FILE_PATH = "\\AllJavaProjects\\JavaCore\\src\\homeworks\\hm11onlineMarket\\data\\orderStorage.dat";
 
     public static void serializeUserStorage(UserStorage userStorage) {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(USER_FILE_PATH))) {
@@ -32,7 +32,7 @@ public abstract class StorageSerializeUtil {
                 return userStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.getStackTrace();
+            e.printStackTrace();
         }
         return new UserStorage();
     }
@@ -57,7 +57,7 @@ public abstract class StorageSerializeUtil {
                 return productStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.getStackTrace();
+            e.printStackTrace();
         }
         return new ProductStorage();
     }
@@ -83,7 +83,7 @@ public abstract class StorageSerializeUtil {
                 return orderStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.getStackTrace();
+            e.printStackTrace();
         }
         return new OrderStorage();
     }

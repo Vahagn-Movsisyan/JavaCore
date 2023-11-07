@@ -5,11 +5,12 @@ import homeworks.hm11onlineMarket.exeption.OutOfStockException;
 import homeworks.hm11onlineMarket.model.Product;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
+import java.io.Serializable;
 
-public class ProductStorage {
+
+public class ProductStorage implements Serializable {
     private Product[] products = new Product[10];
     private int size;
-
 
     public void addProduct(Product product) {
         if (products.length == size) {

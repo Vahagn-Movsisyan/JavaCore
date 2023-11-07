@@ -5,7 +5,9 @@ import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 import homeworks.hm11onlineMarket.model.Order;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
-public class OrderStorage {
+import java.io.Serializable;
+
+public class OrderStorage implements Serializable {
     private Order[] orders = new Order[10];
     private int size;
 

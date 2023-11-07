@@ -97,6 +97,7 @@ public class OnlineMarketMain implements Command {
                 orderStorage.printAllOrderStatus();
                 OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine().toUpperCase());
                 orderStorage.changeOrderStatus(orderStatus, orderId);
+                StorageSerializeUtil.serializeOrderStorage(orderStorage);
             } else System.out.println(orderId + " id dose not found");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -139,6 +140,7 @@ public class OnlineMarketMain implements Command {
                 if (userFromStorage != null && productFromStorage != null) {
                     Order order = new Order(orderId, userFromStorage, productFromStorage, date, toCountProductPriceByQuantity, quantity, OrderStatus.NEW, paymentMethod);
                     orderStorage.addOrder(order);
+                    StorageSerializeUtil.serializeProductStorage(productStorage);
                     System.out.println("Order placed successfully.");
                 } else {
                     System.out.println("Payment is cancelled");
@@ -181,6 +183,7 @@ public class OnlineMarketMain implements Command {
         if (productStorage.getProductById(productId) != null) {
             productStorage.deleteProductById(productId);
             System.out.println("Product with id " + productId + " successful deleted");
+            StorageSerializeUtil.serializeProductStorage(productStorage);
         } else System.out.println("Product with id " + productId + " dose not found");
 
     }
@@ -192,6 +195,7 @@ public class OnlineMarketMain implements Command {
         if (orderStorage.getOrderById(orderId) != null) {
             orderStorage.cancelOrderById(orderId);
             System.out.println("Order with id " + orderId + " successful cansel");
+            StorageSerializeUtil.serializeOrderStorage(orderStorage);
         } else System.out.println("Order with id " + orderId + " dose not found");
     }
 
@@ -210,6 +214,7 @@ public class OnlineMarketMain implements Command {
             ProductType productType = ProductType.valueOf(scanner.nextLine().toUpperCase());
             Product product = new Product(productId, stockQty, name, description, price, productType);
             productStorage.addProduct(product);
+            StorageSerializeUtil.serializeProductStorage(productStorage);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

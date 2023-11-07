@@ -4,7 +4,9 @@ import homeworks.hm11onlineMarket.model.enums.UserType;
 import homeworks.hm11onlineMarket.model.User;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
-public class UserStorage {
+import java.io.Serializable;
+
+public class UserStorage implements Serializable {
     private User[] users = new User[10];
     private int size;
 
