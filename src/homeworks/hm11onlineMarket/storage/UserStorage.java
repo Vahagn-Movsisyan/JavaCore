@@ -2,6 +2,7 @@ package homeworks.hm11onlineMarket.storage;
 
 import homeworks.hm11onlineMarket.model.enums.UserType;
 import homeworks.hm11onlineMarket.model.User;
+import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 public class UserStorage {
     private User[] users = new User[10];
@@ -12,6 +13,7 @@ public class UserStorage {
             extend();
         }
         users[size++] = user;
+        StorageSerializeUtil.serializeUserStorage(this);
     }
 
     public void printOnlyAllUsers() {
@@ -46,14 +48,6 @@ public class UserStorage {
         return null;
     }
 
-    public UserType getUserType(String userId) {
-        for (int i = 0; i < size; i++) {
-            if (users[i].getId().equals(userId)) {
-                return users[i].getUserType();
-            }
-        }
-        return null;
-    }
 
     public boolean isValidEmail(String email) {
         if (!isValidEmailFormat(email)) {
@@ -71,9 +65,8 @@ public class UserStorage {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         if (email.matches(emailRegex)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private boolean isEmailExists(String email) {

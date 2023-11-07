@@ -3,6 +3,7 @@ package homeworks.hm11onlineMarket.storage;
 import homeworks.hm11onlineMarket.model.enums.OrderStatus;
 import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 import homeworks.hm11onlineMarket.model.Order;
+import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 public class OrderStorage {
     private Order[] orders = new Order[10];
@@ -14,6 +15,7 @@ public class OrderStorage {
             if (orders[i].getId().equals(orderId)) {
                 orders[i].setOrderStatus(OrderStatus.CANCELED);
                 exist = true;
+                StorageSerializeUtil.serializeOrderStorage(this);
             }
         }
         if (!exist) {
@@ -30,6 +32,7 @@ public class OrderStorage {
                 orders[i].setOrderStatus(orderStatus);
                 productStorage.handleDelivery(orders[i].getProduct(), orders[i].getQuantity());
                 exist = true;
+                StorageSerializeUtil.serializeOrderStorage(this);
             }
         }
         if (!exist) System.out.println(orderId + " id dose not found!");
@@ -84,6 +87,7 @@ public class OrderStorage {
             extend();
         }
         orders[size++] = order;
+        StorageSerializeUtil.serializeOrderStorage(this);
     }
 
     private void extend() {

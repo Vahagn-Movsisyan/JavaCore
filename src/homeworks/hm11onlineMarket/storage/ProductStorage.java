@@ -3,6 +3,8 @@ package homeworks.hm11onlineMarket.storage;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
 import homeworks.hm11onlineMarket.exeption.OutOfStockException;
 import homeworks.hm11onlineMarket.model.Product;
+import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
+
 
 public class ProductStorage {
     private Product[] products = new Product[10];
@@ -14,6 +16,7 @@ public class ProductStorage {
             extend();
         }
         products[size++] = product;
+        StorageSerializeUtil.serializeProductStorage(this);
     }
 
     public void deleteProductById(String productId) {
@@ -26,6 +29,7 @@ public class ProductStorage {
                 products[size - 1] = null;
                 size--;
                 exist = true;
+                StorageSerializeUtil.serializeProductStorage(this);
             }
         }
         if (!exist) {
@@ -74,6 +78,7 @@ public class ProductStorage {
     public void handleDelivery(Product product, int deliveredQuantity) {
         if (product.getStockQty() >= deliveredQuantity) {
             product.setStockQty(product.getStockQty() - deliveredQuantity);
+            StorageSerializeUtil.serializeProductStorage(this);
         } else {
             System.out.println("Insufficient stock for product: " + product.getName());
         }

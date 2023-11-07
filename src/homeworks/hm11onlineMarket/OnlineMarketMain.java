@@ -1,8 +1,5 @@
 package homeworks.hm11onlineMarket;
 
-import homeworks.hm11onlineMarket.command.CommandsForAdmin;
-import homeworks.hm11onlineMarket.command.CommandsForGlobalMenu;
-import homeworks.hm11onlineMarket.command.CommandsForUser;
 import homeworks.hm11onlineMarket.model.enums.OrderStatus;
 import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
@@ -15,29 +12,31 @@ import homeworks.hm11onlineMarket.storage.OrderStorage;
 import homeworks.hm11onlineMarket.storage.ProductStorage;
 import homeworks.hm11onlineMarket.storage.UserStorage;
 import homeworks.hm11onlineMarket.util.GenerateUUID;
+import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.util.Date;
 import java.util.Scanner;
 
-public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser, CommandsForAdmin {
+public class OnlineMarketMain implements Command {
     static Scanner scanner = new Scanner(System.in);
-    static OrderStorage orderStorage = new OrderStorage();
-    static ProductStorage productStorage = new ProductStorage();
-    static UserStorage userStorage = new UserStorage();
     static GenerateUUID generateUUID = new GenerateUUID();
     static User currentUser = null;
+    static OrderStorage orderStorage = StorageSerializeUtil.deserializeOrderStorage();
+    static ProductStorage productStorage = StorageSerializeUtil.deserializeProductStorage();
+    static UserStorage userStorage = StorageSerializeUtil.deserializeUserStorage();
 
     public static void main(String[] args) {
         boolean isRune = true;
 
         while (isRune) {
-            CommandsForGlobalMenu.printCommandsForGlobalMenu();
+            Command.printCommandsForGlobalMenu();
             String choiceGlobalMenu = scanner.nextLine();
 
             switch (choiceGlobalMenu) {
                 case EXIT -> isRune = false;
                 case REGISTER -> register();
                 case LOGIN -> login();
+                default -> System.out.println("You are enter an error!");
             }
         }
     }
@@ -45,10 +44,10 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     private static void userCommands() {
         boolean isRun = true;
         while (isRun) {
-            CommandsForUser.printCommandsForUser();
+            Command.printCommandsForUser();
             String choiceUser = scanner.nextLine();
             switch (choiceUser) {
-                case CommandsForUser.LOGOUT -> {
+                case LOGOUT -> {
                     isRun = false;
                     currentUser = null;
                 }
@@ -57,6 +56,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
                 case PRINT_MY_ORDERS -> printUserMyOrder();
                 case CANCEL_ORDER_BY_ID -> canselOrderById();
                 case SEARCH_PRODUCT -> searchProduct();
+                default -> System.out.println("You are enter an error!");
             }
         }
     }
@@ -64,10 +64,10 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
     private static void adminCommands() {
         boolean isRun = true;
         while (isRun) {
-            CommandsForAdmin.printCommandsForAdmin();
+            Command.printCommandsForAdmin();
             String choiceAdmin = scanner.nextLine();
             switch (choiceAdmin) {
-                case CommandsForAdmin.LOGOUT -> {
+                case LOGOUT -> {
                     isRun = false;
                     currentUser = null;
                 }
@@ -77,6 +77,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
                 case PRINT_USERS -> printAllUsers();
                 case PRINT_ORDERS -> printAllOrders();
                 case CHANGE_ORDER_STATUS -> changeOrderStatus();
+                default -> System.out.println("You are enter an error!");
             }
         }
     }
@@ -117,7 +118,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
 
             PaymentMethod paymentMethod;
             try {
-                toCountProductPriceByQuantity = productStorage.toCountProductPriceByQuantity(choiceProductById,quantity);
+                toCountProductPriceByQuantity = productStorage.toCountProductPriceByQuantity(choiceProductById, quantity);
                 paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
             } catch (OutOfStockException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -181,6 +182,7 @@ public class OnlineMarketMain implements CommandsForGlobalMenu, CommandsForUser,
             productStorage.deleteProductById(productId);
             System.out.println("Product with id " + productId + " successful deleted");
         } else System.out.println("Product with id " + productId + " dose not found");
+
     }
 
     private static void canselOrderById() {

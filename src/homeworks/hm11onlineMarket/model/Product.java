@@ -2,7 +2,9 @@ package homeworks.hm11onlineMarket.model;
 
 import homeworks.hm11onlineMarket.model.enums.ProductType;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     private String id;
     private int stockQty;
     private String name;
