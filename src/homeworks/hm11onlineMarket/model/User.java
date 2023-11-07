@@ -72,7 +72,7 @@ public class User implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + getMaskedPassword() + '\'' +
                 ", userType=" + userType +
                 '}';
     }

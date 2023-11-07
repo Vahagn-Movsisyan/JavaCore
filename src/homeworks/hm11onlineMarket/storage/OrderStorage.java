@@ -1,5 +1,6 @@
 package homeworks.hm11onlineMarket.storage;
 
+import homeworks.hm11onlineMarket.exeption.IdNotFoundException;
 import homeworks.hm11onlineMarket.model.enums.OrderStatus;
 import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 import homeworks.hm11onlineMarket.model.Order;
@@ -11,7 +12,7 @@ public class OrderStorage implements Serializable {
     private Order[] orders = new Order[10];
     private int size;
 
-    public void cancelOrderById(String orderId) {
+    public void cancelOrderById(String orderId) throws IdNotFoundException {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
             if (orders[i].getId().equals(orderId)) {
@@ -21,11 +22,11 @@ public class OrderStorage implements Serializable {
             }
         }
         if (!exist) {
-            System.out.println("Invalid order id, please try again");
+           throw new IdNotFoundException(orderId + " this id dose not found");
         }
     }
 
-    public void changeOrderStatus(OrderStatus orderStatus, String orderId) {
+    public void changeOrderStatus(OrderStatus orderStatus, String orderId) throws IdNotFoundException {
         ProductStorage productStorage = new ProductStorage();
         boolean exist = false;
 
@@ -37,27 +38,29 @@ public class OrderStorage implements Serializable {
                 StorageSerializeUtil.serializeOrderStorage(this);
             }
         }
-        if (!exist) System.out.println(orderId + " id dose not found!");
+        if (!exist) {
+            throw new IdNotFoundException(orderId + " this id dose not found");
+        }
     }
 
     public void printUserMyOrders(String userId) {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (orders[i].getUser().getId().equals(userId) && size >= 1) {
+            if (orders[i].getUser().getId().equals(userId)) {
                 System.out.println(orders[i]);
             }
         }
         if (!exist) System.out.println("Not orders at the moment");
     }
 
-    public void printAllOrderStatus() {
+    public void printOrderStatus() {
         OrderStatus[] orderStatuses = OrderStatus.values();
         for (OrderStatus status : orderStatuses) {
             System.out.println(status);
         }
     }
 
-    public void printAllPaymentMet() {
+    public void printAllPaymentMethods() {
         PaymentMethod[] paymentMethods = PaymentMethod.values();
         for (PaymentMethod paymentMethod : paymentMethods) {
             System.out.println(paymentMethod);
@@ -67,10 +70,8 @@ public class OrderStorage implements Serializable {
     public void printAllOrders() {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (size >= 1) {
-                System.out.println(orders[i]);
-                exist = true;
-            }
+            System.out.println(orders[i]);
+            exist = true;
         }
         if (!exist) System.out.println("Not orders at the moment");
     }

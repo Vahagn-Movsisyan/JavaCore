@@ -21,7 +21,7 @@ public class UserStorage implements Serializable {
     public void printOnlyAllUsers() {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (users[i].getUserType() == UserType.USER && size >= 1) {
+            if (users[i].getUserType() == UserType.USER) {
                 System.out.println(users[i]);
                 exist = true;
             }

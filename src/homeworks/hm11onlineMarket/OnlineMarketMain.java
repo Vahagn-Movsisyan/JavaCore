@@ -1,5 +1,6 @@
 package homeworks.hm11onlineMarket;
 
+import homeworks.hm11onlineMarket.exeption.IdNotFoundException;
 import homeworks.hm11onlineMarket.model.enums.OrderStatus;
 import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
@@ -94,12 +95,12 @@ public class OnlineMarketMain implements Command {
             String orderId = scanner.nextLine();
             if (orderStorage.getOrderById(orderId) != null) {
                 System.out.println("Enter new status:");
-                orderStorage.printAllOrderStatus();
+                orderStorage.printOrderStatus();
                 OrderStatus orderStatus = OrderStatus.valueOf(scanner.nextLine().toUpperCase());
                 orderStorage.changeOrderStatus(orderStatus, orderId);
                 StorageSerializeUtil.serializeOrderStorage(orderStorage);
             } else System.out.println(orderId + " id dose not found");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IdNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -115,7 +116,7 @@ public class OnlineMarketMain implements Command {
             System.out.println("Please choice quantity product with you want to buy:");
             int quantity = Integer.parseInt(scanner.nextLine());
             System.out.println("Please choice payment metod:");
-            orderStorage.printAllPaymentMet();
+            orderStorage.printAllPaymentMethods();
 
             PaymentMethod paymentMethod;
             try {
@@ -181,11 +182,16 @@ public class OnlineMarketMain implements Command {
         String productId = scanner.nextLine();
 
         if (productStorage.getProductById(productId) != null) {
-            productStorage.deleteProductById(productId);
+            try {
+                productStorage.deleteProductById(productId);
+            } catch (IdNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
             System.out.println("Product with id " + productId + " successful deleted");
             StorageSerializeUtil.serializeProductStorage(productStorage);
-        } else System.out.println("Product with id " + productId + " dose not found");
-
+        } else {
+            System.out.println("Product with id " + productId + " dose not found");
+        }
     }
 
     private static void canselOrderById() {
@@ -193,7 +199,11 @@ public class OnlineMarketMain implements Command {
         printUserMyOrder();
         String orderId = scanner.nextLine();
         if (orderStorage.getOrderById(orderId) != null) {
-            orderStorage.cancelOrderById(orderId);
+            try {
+                orderStorage.cancelOrderById(orderId);
+            } catch (IdNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
             System.out.println("Order with id " + orderId + " successful cansel");
             StorageSerializeUtil.serializeOrderStorage(orderStorage);
         } else System.out.println("Order with id " + orderId + " dose not found");
@@ -278,6 +288,8 @@ public class OnlineMarketMain implements Command {
             } else if (currentUser.getUserType() == UserType.USER) {
                 userCommands();
             }
-        } else System.out.println("Invalid Login, please try again");
+        } else {
+            System.out.println("Invalid Login, please try again");
+        }
     }
 }

@@ -1,13 +1,12 @@
 package homeworks.hm11onlineMarket.storage;
 
+import homeworks.hm11onlineMarket.exeption.IdNotFoundException;
 import homeworks.hm11onlineMarket.model.enums.ProductType;
 import homeworks.hm11onlineMarket.exeption.OutOfStockException;
 import homeworks.hm11onlineMarket.model.Product;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
-
-
 public class ProductStorage implements Serializable {
     private Product[] products = new Product[10];
     private int size;
@@ -20,7 +19,7 @@ public class ProductStorage implements Serializable {
         StorageSerializeUtil.serializeProductStorage(this);
     }
 
-    public void deleteProductById(String productId) {
+    public void deleteProductById(String productId) throws IdNotFoundException {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
             if (products[i].getId().equals(productId)) {
@@ -34,7 +33,7 @@ public class ProductStorage implements Serializable {
             }
         }
         if (!exist) {
-            System.out.println("Invalid user id, please try again");
+            throw new IdNotFoundException(productId + " this id dose not found");
         }
     }
 
@@ -50,10 +49,8 @@ public class ProductStorage implements Serializable {
     public void printAllProducts() {
         boolean exist = false;
         for (int i = 0; i < size; i++) {
-            if (size >= 1) {
-                System.out.println(products[i]);
-                exist = true;
-            }
+            System.out.println(products[i]);
+            exist = true;
         }
         if (!exist) {
             System.out.println("Not products at the moment");

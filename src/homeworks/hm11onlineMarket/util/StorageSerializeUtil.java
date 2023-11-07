@@ -32,7 +32,7 @@ public abstract class StorageSerializeUtil {
                 return userStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
         return new UserStorage();
     }
@@ -57,7 +57,7 @@ public abstract class StorageSerializeUtil {
                 return productStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
         return new ProductStorage();
     }
@@ -83,7 +83,7 @@ public abstract class StorageSerializeUtil {
                 return orderStorage;
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
         return new OrderStorage();
     }
