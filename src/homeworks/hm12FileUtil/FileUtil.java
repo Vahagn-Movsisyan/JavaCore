@@ -3,20 +3,21 @@ package homeworks.hm12FileUtil;
 import java.io.*;
 import java.util.Scanner;
 
-public class FileUtil {
+public class FileUtil implements Command {
     private static final Scanner SCANNER = new Scanner(System.in);
+
     public static void main(String[] args) {
         boolean isRun = true;
         while (isRun) {
             Command.printCommands();
             String choice = SCANNER.nextLine();
             switch (choice) {
-                case "0" -> isRun = false;
-                case "1" -> fileSearch();
-                case "2" -> contentSearch();
-                case "3" -> findLines();
-                case "4" -> printSizeOfPackage();
-                case "5" -> createFileWithContent();
+                case EXIT -> isRun = false;
+                case SEARCH_FILE -> fileSearch();
+                case CONTENT_SEARCH -> contentSearch();
+                case FIND_LINES -> findLines();
+                case PRINT_SIZE_PACKAGE -> printSizeOfPackage();
+                case CREATE_FILE_WITH_CONTENT -> createFileWithContent();
                 default -> System.out.println("Unknown Command!");
             }
         }

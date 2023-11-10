@@ -16,7 +16,7 @@ public interface Command {
     String CHANGE_ORDER_STATUS = "6";
 
     //Commands fo User
-    String  PRINT_ALL_PRODUCTS = "1";
+    String PRINT_ALL_PRODUCTS = "1";
     String BUY_PRODUCT = "2";
     String PRINT_MY_ORDERS = "3";
     String CANCEL_ORDER_BY_ID = "4";
