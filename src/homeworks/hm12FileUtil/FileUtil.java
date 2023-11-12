@@ -117,7 +117,9 @@ public class FileUtil implements Command {
         System.out.println("Enter the path and keyword by ',':");
         String path = SCANNER.nextLine();
         String[] patAndKeywordArr = path.split(",");
+
         File file = new File(patAndKeywordArr[0].trim());
+        String keyword = patAndKeywordArr[1].trim();
 
         //To avoid the ArrayIndexOutOfBoundException
         if (patAndKeywordArr.length != 2) {
@@ -132,7 +134,7 @@ public class FileUtil implements Command {
 
                 while ((foundLine = bufferedReader.readLine()) != null) {
                     lineCount++;
-                    if (foundLine.equals(patAndKeywordArr[1].trim())) {
+                    if (foundLine.equals(keyword)) {
                         System.out.println(lineCount + "-" + foundLine);
                         isFound = true;
                     }
@@ -141,7 +143,7 @@ public class FileUtil implements Command {
                 System.out.println(e.getMessage());
             }
             if (!isFound) {
-                System.out.println(patAndKeywordArr[1] + " dosen't found");
+                System.out.println(keyword + " dosen't found");
             }
         }
     }
