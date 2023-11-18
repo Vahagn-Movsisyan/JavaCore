@@ -5,24 +5,22 @@ import homeworks.hm11onlineMarket.model.User;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserStorage implements Serializable {
-    private User[] users = new User[10];
-    private int size;
+    private final List<User> USERS = new ArrayList<>();
 
     public void addUser(User user) {
-        if (users.length == size) {
-            extend();
-        }
-        users[size++] = user;
+        USERS.add(user);
         StorageSerializeUtil.serializeUserStorage(this);
     }
 
     public void printOnlyAllUsers() {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            if (users[i].getUserType() == UserType.USER) {
-                System.out.println(users[i]);
+        for (User user : USERS) {
+            if (user.getUserType() == UserType.USER) {
+                System.out.println(user);
                 exist = true;
             }
         }
@@ -32,19 +30,19 @@ public class UserStorage implements Serializable {
     }
 
     public User getUserBYEmailAndPassword(String email, String password) {
-        for (int i = 0; i < size; i++) {
-            if (users[i] != null && users[i].getEmail() != null && users[i].getPassword() != null &&
-                    users[i].getEmail().equals(email) && users[i].getPassword().equals(password)) {
-                return users[i];
+        for (User user : USERS) {
+            if (user != null && user.getEmail() != null && user.getPassword() != null &&
+                    user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                return user;
             }
         }
         return null;
     }
 
     public User getUserById(String userId) {
-        for (int i = 0; i < size; i++) {
-            if (users[i].getId().equals(userId)) {
-                return users[i];
+        for (User user : USERS) {
+            if (user.getId().equals(userId)) {
+                return user;
             }
         }
         return null;
@@ -72,17 +70,11 @@ public class UserStorage implements Serializable {
     }
 
     private boolean isEmailExists(String email) {
-        for (int i = 0; i < size; i++) {
-            if (users[i] != null && users[i].getEmail() != null && users[i].getEmail().equals(email)) {
+        for (User user : USERS) {
+            if (user != null && user.getEmail() != null && user.getEmail().equals(email)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private void extend() {
-        User[] tmp = new User[users.length + 10];
-        System.arraycopy(users, 0, tmp, 0, users.length);
-        users = tmp;
     }
 }

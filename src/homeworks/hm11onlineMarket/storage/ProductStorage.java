@@ -7,29 +7,24 @@ import homeworks.hm11onlineMarket.model.Product;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductStorage implements Serializable {
-    private Product[] products = new Product[10];
-    private int size;
+    private final List<Product> PRODUCTS = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if (products.length == size) {
-            extend();
-        }
-        products[size++] = product;
+        PRODUCTS.add(product);
         StorageSerializeUtil.serializeProductStorage(this);
     }
 
     public void deleteProductById(String productId) throws IdNotFoundException {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            if (products[i].getId().equals(productId)) {
-                for (int j = i; j < size; j++) {
-                    products[j] = products[j + 1];
-                }
-                products[size - 1] = null;
-                size--;
-                exist = true;
+        for (Product product : PRODUCTS) {
+            if (product.getId().equals(productId)) {
+                PRODUCTS.remove(product);
                 StorageSerializeUtil.serializeProductStorage(this);
+                exist = true;
             }
         }
         if (!exist) {
@@ -38,9 +33,9 @@ public class ProductStorage implements Serializable {
     }
 
     public int toCountProductPriceByQuantity(String productId, int quantity) throws OutOfStockException {
-        for (int i = 0; i < size; i++) {
-            if (products[i].getId().equals(productId) && products[i].getStockQty() > quantity) {
-                return (int) (products[i].getPrice() * quantity);
+        for (Product product : PRODUCTS) {
+            if (product.getId().equals(productId) && product.getStockQty() > quantity) {
+                return (int) (product.getPrice() * quantity);
             }
         }
         throw new OutOfStockException(quantity + " this quantity dose not available, please try another quantity");
@@ -48,8 +43,8 @@ public class ProductStorage implements Serializable {
 
     public void printAllProducts() {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            System.out.println(products[i]);
+        for (Product product : PRODUCTS) {
+            System.out.println(product);
             exist = true;
         }
         if (!exist) {
@@ -59,8 +54,7 @@ public class ProductStorage implements Serializable {
 
     public void searchProduct(String searchCriteria) {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            Product product = products[i];
+        for (Product product : PRODUCTS) {
             if (product.getId().equals(searchCriteria)
                     || product.getName().contains(searchCriteria)
                     || product.getDescription().contains(searchCriteria)) {
@@ -90,17 +84,11 @@ public class ProductStorage implements Serializable {
     }
 
     public Product getProductById(String productId) {
-        for (int i = 0; i < size; i++) {
-            if (products[i].getId().equals(productId)) {
-                return products[i];
+        for (Product product : PRODUCTS) {
+            if (product.getId().equals(productId)) {
+                return product;
             }
         }
         return null;
-    }
-
-    private void extend() {
-        Product[] tmp = new Product[products.length + 10];
-        System.arraycopy(products, 0, tmp, 0, products.length);
-        products = tmp;
     }
 }

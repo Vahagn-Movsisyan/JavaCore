@@ -1,0 +1,6 @@
+package newideas
+
+dependencies {
+    // Другие зависимости вашего проекта
+    implementation 'org.opencv:opencv-java:4.5.1' // Укажите актуальную версию
+}

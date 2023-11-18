@@ -7,35 +7,19 @@ import homeworks.hm11onlineMarket.model.Order;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class OrderStorage implements Serializable {
-    private Order[] orders = new Order[10];
-    private int size;
+    private final List<Order> ORDERS = new ArrayList<>();
 
     public void cancelOrderById(String orderId) throws IdNotFoundException {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId)) {
-                orders[i].setOrderStatus(OrderStatus.CANCELED);
+        for (Order order : ORDERS) {
+            if (order.getId().equals(orderId)) {
+                order.setOrderStatus(OrderStatus.CANCELED);
                 exist = true;
-                StorageSerializeUtil.serializeOrderStorage(this);
-            }
-        }
-        if (!exist) {
-           throw new IdNotFoundException(orderId + " this id dose not found");
-        }
-    }
-
-    public void changeOrderStatus(OrderStatus orderStatus, String orderId) throws IdNotFoundException {
-        ProductStorage productStorage = new ProductStorage();
-        boolean exist = false;
-
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId) && orderStatus == OrderStatus.DELIVERED) {
-                orders[i].setOrderStatus(orderStatus);
-                productStorage.handleDelivery(orders[i].getProduct(), orders[i].getQuantity());
-                exist = true;
-                StorageSerializeUtil.serializeOrderStorage(this);
             }
         }
         if (!exist) {
@@ -43,14 +27,35 @@ public class OrderStorage implements Serializable {
         }
     }
 
-    public void printUserMyOrders(String userId) {
+    public void changeOrderStatus(OrderStatus orderStatus, String orderId) throws IdNotFoundException {
+        ProductStorage productStorage = new ProductStorage();
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getUser().getId().equals(userId)) {
-                System.out.println(orders[i]);
+
+        for (Order order : ORDERS) {
+            if (order.getId().equals(orderId) && order.getOrderStatus() == OrderStatus.NEW && orderStatus == OrderStatus.DELIVERED) {
+                order.setOrderStatus(orderStatus);
+                productStorage.handleDelivery(order.getProduct(), order.getQuantity());
+                StorageSerializeUtil.serializeOrderStorage(this);
+                exist = true;
             }
         }
-        if (!exist) System.out.println("Not orders at the moment");
+
+        if (!exist) {
+            throw new IdNotFoundException(orderId + " this id dose not found or order status is delivery or cansel");
+        }
+    }
+
+    public void printUserMyOrders(String userId) {
+        boolean exist = false;
+        for (Order order : ORDERS) {
+            if (order.getId().equals(userId)) {
+                System.out.println(order);
+                exist = true;
+            }
+        }
+        if (!exist) {
+            System.out.println("Not orders at the moment");
+        }
     }
 
     public void printOrderStatus() {
@@ -69,33 +74,26 @@ public class OrderStorage implements Serializable {
 
     public void printAllOrders() {
         boolean exist = false;
-        for (int i = 0; i < size; i++) {
-            System.out.println(orders[i]);
+        for (Order order : ORDERS) {
+            System.out.println(order);
             exist = true;
         }
-        if (!exist) System.out.println("Not orders at the moment");
+        if (!exist) {
+            System.out.println("Not orders at the moment");
+        }
     }
 
     public Order getOrderById(String orderId) {
-        for (int i = 0; i < size; i++) {
-            if (orders[i].getId().equals(orderId)) {
-                return orders[i];
+        for (Order order : ORDERS) {
+            if (order.getId().equals(orderId)) {
+                return order;
             }
         }
         return null;
     }
 
     public void addOrder(Order order) {
-        if (orders.length == size) {
-            extend();
-        }
-        orders[size++] = order;
+        ORDERS.add(order);
         StorageSerializeUtil.serializeOrderStorage(this);
-    }
-
-    private void extend() {
-        Order[] tmp = new Order[orders.length + 10];
-        System.arraycopy(orders, 0, tmp, 0, orders.length);
-        orders = tmp;
     }
 }

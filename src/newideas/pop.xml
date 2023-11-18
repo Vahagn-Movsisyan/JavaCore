@@ -1,0 +1,9 @@
+<dependencies>
+    <!-- Другие зависимости вашего проекта -->
+    <dependency>
+        <groupId>org.opencv</groupId>
+        <artifactId>opencv-java</artifactId>
+        <version>4.5.1</version> <!-- Укажите актуальную версию -->
+    </dependency>
+</dependencies>
+
