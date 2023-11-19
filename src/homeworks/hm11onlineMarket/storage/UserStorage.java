@@ -5,20 +5,20 @@ import homeworks.hm11onlineMarket.model.User;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserStorage implements Serializable {
-    private final List<User> USERS = new ArrayList<>();
+    private final Map<String, User> USERS = new HashMap<>();
 
     public void addUser(User user) {
-        USERS.add(user);
+        USERS.put(user.getId(), user);
         StorageSerializeUtil.serializeUserStorage(this);
     }
 
     public void printOnlyAllUsers() {
         boolean exist = false;
-        for (User user : USERS) {
+        for (User user : USERS.values()) {
             if (user.getUserType() == UserType.USER) {
                 System.out.println(user);
                 exist = true;
@@ -30,7 +30,7 @@ public class UserStorage implements Serializable {
     }
 
     public User getUserBYEmailAndPassword(String email, String password) {
-        for (User user : USERS) {
+        for (User user : USERS.values()) {
             if (user != null && user.getEmail() != null && user.getPassword() != null &&
                     user.getEmail().equals(email) && user.getPassword().equals(password)) {
                 return user;
@@ -40,14 +40,13 @@ public class UserStorage implements Serializable {
     }
 
     public User getUserById(String userId) {
-        for (User user : USERS) {
+        for (User user : USERS.values()) {
             if (user.getId().equals(userId)) {
                 return user;
             }
         }
         return null;
     }
-
 
     public boolean isValidEmail(String email) {
         if (!isValidEmailFormat(email)) {
@@ -63,14 +62,11 @@ public class UserStorage implements Serializable {
 
     private boolean isValidEmailFormat(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        if (email.matches(emailRegex)) {
-            return true;
-        }
-        return false;
+        return email.matches(emailRegex);
     }
 
     private boolean isEmailExists(String email) {
-        for (User user : USERS) {
+        for (User user : USERS.values()) {
             if (user != null && user.getEmail() != null && user.getEmail().equals(email)) {
                 return true;
             }

@@ -7,12 +7,14 @@ import homeworks.hm11onlineMarket.model.Order;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-
 public class OrderStorage implements Serializable {
-    private final List<Order> ORDERS = new ArrayList<>();
+    private final List<Order> ORDERS = new LinkedList<>();
+    public void addOrder(Order order) {
+        ORDERS.add(order);
+        StorageSerializeUtil.serializeOrderStorage(this);
+    }
 
     public void cancelOrderById(String orderId) throws IdNotFoundException {
         boolean exist = false;
@@ -48,7 +50,7 @@ public class OrderStorage implements Serializable {
     public void printUserMyOrders(String userId) {
         boolean exist = false;
         for (Order order : ORDERS) {
-            if (order.getId().equals(userId)) {
+            if (order.getUser().getId().equals(userId)) {
                 System.out.println(order);
                 exist = true;
             }
@@ -90,10 +92,5 @@ public class OrderStorage implements Serializable {
             }
         }
         return null;
-    }
-
-    public void addOrder(Order order) {
-        ORDERS.add(order);
-        StorageSerializeUtil.serializeOrderStorage(this);
     }
 }

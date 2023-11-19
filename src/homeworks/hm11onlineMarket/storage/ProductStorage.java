@@ -7,11 +7,11 @@ import homeworks.hm11onlineMarket.model.Product;
 import homeworks.hm11onlineMarket.util.StorageSerializeUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProductStorage implements Serializable {
-    private final List<Product> PRODUCTS = new ArrayList<>();
+    private final Set<Product> PRODUCTS = new HashSet<>();
 
     public void addProduct(Product product) {
         PRODUCTS.add(product);
@@ -19,15 +19,10 @@ public class ProductStorage implements Serializable {
     }
 
     public void deleteProductById(String productId) throws IdNotFoundException {
-        boolean exist = false;
-        for (Product product : PRODUCTS) {
-            if (product.getId().equals(productId)) {
-                PRODUCTS.remove(product);
-                StorageSerializeUtil.serializeProductStorage(this);
-                exist = true;
-            }
-        }
-        if (!exist) {
+        boolean removed = PRODUCTS.removeIf(product -> product.getId().equals(productId));
+        if (removed) {
+            StorageSerializeUtil.serializeProductStorage(this);
+        } else {
             throw new IdNotFoundException(productId + " this id dose not found");
         }
     }
