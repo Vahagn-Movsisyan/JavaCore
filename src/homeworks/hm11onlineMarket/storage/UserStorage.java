@@ -40,10 +40,9 @@ public class UserStorage implements Serializable {
     }
 
     public User getUserById(String userId) {
-        for (User user : USERS.values()) {
-            if (user.getId().equals(userId)) {
-                return user;
-            }
+        User user = USERS.get(userId);
+        if (USERS.get(userId).equals(user)) {
+            return user;
         }
         return null;
     }
