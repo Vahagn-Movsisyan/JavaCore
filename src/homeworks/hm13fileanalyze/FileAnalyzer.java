@@ -58,13 +58,13 @@ public class FileAnalyzer {
     // Читаем файл, находим топ-N часто встречающихся слов
     public Map<String, Integer> topFrequentWords(String path, int topN) throws IOException {
         Map<String, Integer> topFrequentWordsMap = wordMap(path);
-        List<Map.Entry<String, Integer>> sortedEntryList = new ArrayList<>(topFrequentWordsMap.entrySet());
+        List<Map.Entry<String, Integer>> sortedEntryList = topFrequentWordsMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toList());
 
-        sortedEntryList.sort(Comparator.comparing(Map.Entry::getValue));
-
-        int endIndex = Math.min(topN, sortedEntryList.size());
-
-        Map<String,Integer> sortedMap = sortedEntryList.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        Map<String, Integer> sortedMap = sortedEntryList.stream()
+                .limit(topN)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
         sortedMap.forEach((key, value) -> System.out.println(key + ": " + value));
         return sortedMap;

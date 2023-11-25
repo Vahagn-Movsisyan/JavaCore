@@ -70,10 +70,10 @@ public class FileAnalyzerMain implements FileAnalyzerCommand {
     static void topFrequentWords() {
         System.out.println("Enter the path:");
         String filePath = scanner.nextLine();
-        System.out.println("Enter the number:");
+        System.out.println("Enter the top N:");
         try {
-            int number = Integer.parseInt(scanner.nextLine());
-            fileAnalyzer.topFrequentWords(filePath, number);
+            int topN = Integer.parseInt(scanner.nextLine());
+            fileAnalyzer.topFrequentWords(filePath, topN);
         } catch (IOException | NumberFormatException e) {
             System.out.println(e.getMessage());
         }
