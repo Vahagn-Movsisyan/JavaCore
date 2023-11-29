@@ -19,7 +19,7 @@ public class ArrayUtil {
     public void getLastElement(int[] numbers) {
         System.out.println("Last element in array");
         int lastIndex = numbers.length - 1;
-        System.out.println( numbers[lastIndex]);
+        System.out.println(numbers[lastIndex]);
     }
 
     public void getArrayLength(int[] numbers) {

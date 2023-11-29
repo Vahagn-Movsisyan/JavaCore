@@ -73,7 +73,7 @@ public class FileAnalyzerMain implements FileAnalyzerCommand {
         System.out.println("Enter the top N:");
         try {
             int topN = Integer.parseInt(scanner.nextLine());
-            fileAnalyzer.topFrequentWords(filePath, topN);
+            System.out.println(fileAnalyzer.topFrequentWords(filePath, topN));
         } catch (IOException | NumberFormatException e) {
             System.out.println(e.getMessage());
         }

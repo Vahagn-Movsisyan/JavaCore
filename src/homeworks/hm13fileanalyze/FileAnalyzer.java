@@ -34,19 +34,14 @@ public class FileAnalyzer {
 
     // Читаем файл, подсчитываем общее количество слов
     public int totalWordCount(String path) throws IOException {
-        File filePath = new File(path);
-        if (filePath.exists() && filePath.isFile()) {
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-                String line;
-                int totalWordCount = 0;
-                while ((line = bufferedReader.readLine()) != null) {
-                    String[] splitLine = line.split("\\s+");
-                    totalWordCount += splitLine.length;
-                }
-                return totalWordCount;
+        Map<String, Integer> stringIntegerMap = wordMap(path);
+        int countAllWord = 0;
+        for (Map.Entry<String, Integer> stringIntegerEntry : stringIntegerMap.entrySet()) {
+            if (stringIntegerEntry.getKey().length() != 1) { // Exam Map key is word or letter
+                countAllWord += stringIntegerEntry.getValue();
             }
         }
-        return 0;
+        return countAllWord;
     }
 
     // Читаем файл, подсчитываем количество уникальных слов
@@ -58,15 +53,14 @@ public class FileAnalyzer {
     // Читаем файл, находим топ-N часто встречающихся слов
     public Map<String, Integer> topFrequentWords(String path, int topN) throws IOException {
         Map<String, Integer> topFrequentWordsMap = wordMap(path);
-        List<Map.Entry<String, Integer>> sortedEntryList = topFrequentWordsMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toList());
+        List<Map.Entry<String, Integer>> topFrequentWordsList = new ArrayList<>(topFrequentWordsMap.entrySet());
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+        topFrequentWordsList.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
 
-        Map<String, Integer> sortedMap = sortedEntryList.stream()
-                .limit(topN)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-        sortedMap.forEach((key, value) -> System.out.println(key + ": " + value));
+        for (int i = 0; i < topN; i++) {
+            Map.Entry<String, Integer> stringIntegerEntry = topFrequentWordsList.get(i);
+            sortedMap.put(stringIntegerEntry.getKey(), stringIntegerEntry.getValue());
+        }
         return sortedMap;
     }
 
