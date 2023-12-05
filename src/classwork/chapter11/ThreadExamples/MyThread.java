@@ -3,7 +3,7 @@ package classwork.chapter11.ThreadExamples;
 public class MyThread implements Runnable {
     Thread thread;
 
-    public MyThread(Runnable runnable) {
+    public MyThread() {
         this.thread = new Thread(this);
         thread.start();
     }

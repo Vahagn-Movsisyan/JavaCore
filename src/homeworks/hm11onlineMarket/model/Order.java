@@ -5,6 +5,7 @@ import homeworks.hm11onlineMarket.model.enums.PaymentMethod;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 public class Order implements Serializable {
     private String id;
@@ -28,6 +29,39 @@ public class Order implements Serializable {
     }
 
     public Order() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (Double.compare(price, order.price) != 0) return false;
+        if (quantity != order.quantity) return false;
+        if (!Objects.equals(id, order.id)) return false;
+        if (!Objects.equals(user, order.user)) return false;
+        if (!Objects.equals(product, order.product)) return false;
+        if (!Objects.equals(date, order.date)) return false;
+        if (orderStatus != order.orderStatus) return false;
+        return paymentMethod == order.paymentMethod;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + quantity;
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
+        result = 31 * result + (paymentMethod != null ? paymentMethod.hashCode() : 0);
+        return result;
     }
 
     public String getId() {
