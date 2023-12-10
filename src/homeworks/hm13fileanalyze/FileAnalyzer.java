@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FileAnalyzer {
     // Читаем файл, составляем мапу слово-количество и возвращаем ее

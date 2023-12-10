@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class Test {
     public static void main(String[] args) {
-        int[] arr = {4, 2, 8, 5, 9, 1, 7, 3, 5, 6};
+        int[] arr = {4, 2, 8, 5, 9, 1, 7, 3, 6};
         int number = 9;
         String name = "poxos";
         Map<String, Integer> map = new HashMap<>();
@@ -11,9 +11,12 @@ public class Test {
         map.put("carr", 8);
         map.put("box", 9);
 
+        reversedArray(arr);
 
+//        reversInt(561240);
+//         reversLiine(name);
 //        sort(arr);
-        foundDublicateNumbers(arr);
+//        foundDublicateNumbers(arr);
 //        System.out.println(factorial(number));
 //         dublicatElementFound(arr);
 //        System.out.println(toFoundMaxElement(arr));
@@ -43,8 +46,20 @@ public class Test {
 //        }
     }
 
+    static void reversLiine(String line) {
+        for (int i = line.length() - 1; i >= 0; i--) {
+            System.out.print(line.charAt(i));
+        }
+    }
 
-    static void printKeySet (Map<String, Integer> map) {
+    static void reversInt(int number) {
+        String intToString = Integer.toString(number);
+        for (int i = intToString.length() - 1; i >= 0; i--) {
+            System.out.print(intToString.charAt(i));
+        }
+    }
+
+    static void printKeySet(Map<String, Integer> map) {
         for (String s : map.keySet()) {
             System.out.println(s);
         }
@@ -75,12 +90,15 @@ public class Test {
         return tmp;
     }
 
-    static String[] reversLine(String line) {
-        String[] tmp = new String[line.length()];
-        for (int i = line.length() - 1; i >= 0; i--) {
-            tmp[line.length() - i - 1] = Character.toString(line.charAt(i));
+    static String reversLine(String line) {
+        String reversLine = "";
+        if (line == null) {
+            return "";
         }
-        return tmp;
+        for (int i = line.length(); i >= 0 ; i--) {
+            reversLine += line.charAt(i);
+        }
+        return reversLine;
     }
 
     static void printPrimeNumbers1to100() {
@@ -179,8 +197,8 @@ public class Test {
     }
 
     static void reversedArray(int[] arr) {
-        for (int i = arr.length - 1; i >= 0; i--) {
-            System.out.print(arr[i]);
+        for (int i = arr.length - 1; i >= 0 ; i--) {
+            System.out.print(arr[i] + " ");
         }
     }
 
@@ -218,7 +236,7 @@ public class Test {
         return tmpNumber;
     }
 
-    static void sort (int[] arr) {
+    static void sort(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
                 if (arr[j] > arr[j + 1]) {

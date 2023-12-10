@@ -1,5 +1,4 @@
 package newideas;
-
 public class Arrays {
     public static void main(String[] args) {
         int[][] matrix = {
@@ -7,7 +6,6 @@ public class Arrays {
                 {7, 2, 4},
                 {6, 1, 9}
         };
-
 
         int totalElements = matrix.length * matrix[0].length;
         int[] changeArray = new int[totalElements];
